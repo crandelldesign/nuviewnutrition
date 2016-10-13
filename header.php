@@ -90,10 +90,13 @@
                     <div class="container-fluid">
                         <div class="navbar-header">
                             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                                <span class="sr-only">Toggle navigation</span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
+                                <span class="pull-left toggle-text">Menu</span>
+                                <span class="pull-right icon-bars">
+                                    <span class="sr-only">Toggle navigation</span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                </span>
                             </button>
                             <!--<a class="navbar-brand" href="<?php echo home_url(); ?>" itemscope itemtype="http://schema.org/Organization">
                                 <img src="<?php echo get_template_directory_uri(); ?>/library/images/nuviewnutrition-logo.png" class="img-responsive logo" alt="<?php bloginfo( 'name' ); ?>">
@@ -120,7 +123,7 @@
                                 <?php dynamic_sidebar( 'social_media' ); ?>
                                 </ul>
                             <?php endif; ?>
-                            
+
                         </div>
                     </div>
                 </nav>

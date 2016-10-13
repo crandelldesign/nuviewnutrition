@@ -378,6 +378,26 @@ nav.navbar {
             }
         }
     }
+    .navbar-toggle {
+        border: 1px solid #FFF;
+        border-radius: 4px;
+        width: 95px;
+        color: #FFF;
+        font-size: 15px;
+        line-height: 15px;
+        .toggle-text {
+            margin-right: 5px;
+            line-height: normal;
+        }
+        .icon-bars {
+            margin-top: 5px;
+        }
+        .icon-bar {
+            width: 22px;
+            border-radius: 1px;
+            background-color: #FFF;
+        }
+    }
 }
 /* Display SVG Logo */
 html.svg .navbar .navbar-brand {
