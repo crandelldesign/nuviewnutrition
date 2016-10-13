@@ -16,8 +16,8 @@
 
                         <div class="col-sm-6">
 
-                            <?php if ( is_active_sidebar( 'footer' ) ) : ?>
-                                <?php dynamic_sidebar( 'footer' ); ?>
+                            <?php if ( is_active_sidebar( 'social_media' ) ) : ?>
+                                <?php dynamic_sidebar( 'social_media' ); ?>
                             <?php endif; ?>
 
                         </div>

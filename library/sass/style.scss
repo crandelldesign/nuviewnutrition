@@ -300,11 +300,16 @@ header.header {
             color: $shiraz;
             font-weight: 600;
         }
-        img {
+        img.img-circle {
             @include shadow-1();
             border: 2px solid $malachite;
             max-width: 150px;
             margin-left: 1em;
+        }
+        img.img-award {
+            max-width: 75px;
+            margin-left: 1em;
+            margin-top: 10px;
         }
     }
 }
@@ -343,6 +348,21 @@ nav.navbar {
                 &:focus {
                     color: #FFF;
                     background-color: $nav-link-hover-bg;
+                }
+            }
+        }
+        .widget {
+            margin: 0;
+            padding: 0;
+            a {
+                padding-top: 9px;
+                padding-bottom: 9px;
+                display: inline-block;
+                i.fa {
+                    //border: 2px solid #FFF;
+                    background-color: #FFF;
+                    color: $crimson !important;
+                    font-size: 1.25em !important;
                 }
             }
         }
@@ -534,6 +554,19 @@ html.svg .navbar .navbar-brand {
             font-size: 14px;
             padding: 10px;
         }
+    }
+}
+
+/* Homepage Contact Form */
+body.home .contact-form-container {
+    h2 {
+        margin-top: 0;
+        text-align: center;
+    }
+    form {
+        max-width: 250px;
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 

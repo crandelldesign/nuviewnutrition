@@ -170,9 +170,9 @@ function bones_register_sidebars()
     ));
 
     register_sidebar(array(
-        'id' => 'footer',
-        'name' => __('footer', 'bonestheme'),
-        'description' => __('The footer widget area.', 'bonestheme'),
+        'id' => 'social_media',
+        'name' => __('Social Media', 'bonestheme'),
+        'description' => __('The social media widget area.', 'bonestheme'),
         'before_widget' => '<div id="%1$s" class="widget %2$s">',
         'after_widget' => '</div>',
         'before_title' => '<h4 class="widgettitle">',
@@ -512,28 +512,12 @@ function contact_form_shortcode()
 }
 add_shortcode('contact_form', 'contact_form_shortcode');
 
-/**
- * Handle Slideshow
- *
- */
-function slideshow_demo_shortcode()
-{
-
-    $slideshow = '<div class="slideshow slideshow-demo">
-        <div class="item">
-            <div class="inner-content">
-                <div class="text-line-1">Alternative Ways to</div>
-                <div class="text-line-2">Live Well</div>
-                <div class="text-line-3"><a href="#" class="btn btn-crimson">Click Here</a></div>
-            </div>
-            <img src="' . get_template_directory_uri() . '/library/images/nuviewfirstslide.jpg" class="img-responsive" alt="Alternative Ways to Live Well">
-        </div>
-    </div>';
-
-    return $slideshow;
-
+/* Remove Social Media Plugin Imports */
+add_action('wp_enqueue_scripts', 'nuview_deregister_styles', PHP_INT_MAX);
+function nuview_deregister_styles()  {
+    wp_dequeue_style('css_for_fa_icon');
+    wp_deregister_style('css_for_fa_icon');
 }
-add_shortcode('slideshow_demo', 'slideshow_demo_shortcode');
 
 /* DON'T DELETE THIS CLOSING TAG */
 ?>

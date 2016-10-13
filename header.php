@@ -67,6 +67,9 @@
                         <div class="col-md-5 col-sm-6 hidden-xs">
                             <div class="cindy">
                                     <div class="pull-right">
+                                        <img src="<?php echo get_template_directory_uri(); ?>/library/images/clarkston-best-of-the-best-2016.jpg" class="img-responsive img-award" alt="2016 Best of the Best">
+                                    </div>
+                                    <div class="pull-right">
                                         <img src="<?php echo get_template_directory_uri(); ?>/library/images/cindy.jpg" class="img-responsive img-circle" alt="Cindy Crandell, RN, CN">
                                     </div>
                                     <p><span class="cindy-name">Cindy Crandell, RN, CN</span><br>
@@ -97,19 +100,28 @@
                                 <img src="<?php echo get_template_directory_uri(); ?>/library/images/nuviewnutrition-logo.svg" class="img-responsive logo svg" alt="<?php bloginfo( 'name' ); ?>">
                             </a>-->
                         </div>
-                        <?php
-                            wp_nav_menu( array(
-                                'menu'              => 'primary',
-                                'theme_location'    => 'primary',
-                                'depth'             => 2,
-                                'container'         => 'div',
-                                'container_class'   => 'collapse navbar-collapse',
-                                'container_id'      => 'navbar',
-                                'menu_class'        => 'nav navbar-nav',
-                                'fallback_cb'       => 'wp_bootstrap_navwalker::fallback',
-                                'walker'            => new wp_bootstrap_navwalker())
-                            );
-                        ?>
+                        <div id="navbar" class="collapse navbar-collapse">
+                            <?php
+                                wp_nav_menu( array(
+                                    'menu'              => 'primary',
+                                    'theme_location'    => 'primary',
+                                    'depth'             => 2,
+                                    //'container'         => 'div',
+                                    //'container_class'   => 'collapse navbar-collapse',
+                                    //'container_id'      => 'navbar',
+                                    'menu_class'        => 'nav navbar-nav',
+                                    'fallback_cb'       => 'wp_bootstrap_navwalker::fallback',
+                                    'walker'            => new wp_bootstrap_navwalker())
+                                );
+
+                            ?>
+                            <?php if ( is_active_sidebar( 'social_media' ) ) : ?>
+                                <ul class="nav navbar-nav navbar-right">
+                                <?php dynamic_sidebar( 'social_media' ); ?>
+                                </ul>
+                            <?php endif; ?>
+                            
+                        </div>
                     </div>
                 </nav>
 			</header>
