@@ -316,25 +316,35 @@ nav.navbar {
     }
     .navbar-nav {
         > li > a {
-          font-weight: 500;
-          &:hover,
-          &:focus {
-          }
+            font-weight: 500;
+            &:hover,
+            &:focus {
+            }
         }
         > .active > a {
-          &,
-          &:hover,
-          &:focus {
-            background-color: $nav-link-hover-bg;
-          }
+            &,
+            &:hover,
+            &:focus {
+                background-color: $nav-link-hover-bg;
+            }
         }
         > .disabled > a {
-          &,
-          &:hover,
-          &:focus {
-            color: $navbar-default-link-disabled-color;
-            background-color: $navbar-default-link-disabled-bg;
-          }
+            &,
+            &:hover,
+            &:focus {
+                color: $navbar-default-link-disabled-color;
+                background-color: $navbar-default-link-disabled-bg;
+            }
+        }
+        .dropdown-menu {
+            > li > a {
+                color: $crimson;
+                &:hover,
+                &:focus {
+                    color: #FFF;
+                    background-color: $nav-link-hover-bg;
+                }
+            }
         }
     }
 }

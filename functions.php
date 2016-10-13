@@ -486,7 +486,7 @@ function contact_form_shortcode()
     }
 
     $admin_post_url = esc_url(admin_url("admin-post.php"));
-    $email_form     = '<form action="' . get_permalink() . '#contact" method="post">
+    $email_form     = '<form class="contact-form" action="' . get_permalink() . '#contact" method="post">
         <div class="form-group' . ((isset($has_error['contactname']) && $has_error['contactname']) ? ' has-error' : '') . '">
             <label for="contactname">Full Name</label>
             <input type="text" name="contactname" id="contactname" value="' . (isset($form_data) ? $form_data['contactname'] : '') . '" class="form-control">
