@@ -367,6 +367,17 @@ nav.navbar {
             }
         }
     }
+    .nav.navbar-nav.navbar-right {
+        @media (min-width: $screen-sm-min) and (max-width: $screen-md-min) {
+            float: none !important;
+            display: block;
+            clear: both;
+            margin-top: 2px;
+            a:first-child {
+                margin-left: 0 !important;
+            }
+        }
+    }
 }
 /* Display SVG Logo */
 html.svg .navbar .navbar-brand {
