@@ -55,11 +55,14 @@
 										</header>
 										<section class="entry-content">
 											<p><?php _e( 'Try your search again.', 'bonestheme' ); ?></p>
+                                            <div class="search">
+                                                <p><?php get_search_form(); ?></p>
+                                            </div>
 										</section>
-										<footer class="article-footer">
-												<p><?php _e( 'This is the error message in the search.php template.', 'bonestheme' ); ?></p>
+										<!---<footer class="article-footer">
+											<p><?php /*_e( 'This is the error message in the search.php template.', 'bonestheme' );*/ ?></p>
 										</footer>
-									</article>
+									</article>-->
 
 							<?php endif; ?>
 

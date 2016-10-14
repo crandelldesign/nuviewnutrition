@@ -157,8 +157,8 @@ be set to display none.
 /* Body Styles */
 html {
     min-height: 100%;
+    position: relative;
     @media (min-width: $screen-md-min) {
-        position: relative;
     }
 }
 body {
@@ -166,9 +166,11 @@ body {
     color: $black;
     background-color: $rosebud;
     font-weight: 300;
-    @media (min-width: $screen-md-min) {
-        /* Margin bottom by footer height */
-        background: url('../images/background.jpg') no-repeat center center fixed;
+    margin-bottom: $footer-height;
+    height: 100%;
+    min-height: 100%;
+    @media (min-width: $screen-sm-min) {
+        background: #636a7b url('../images/background.jpg') no-repeat center center fixed;
         -webkit-background-size: cover;
         -moz-background-size: cover;
         -o-background-size: cover;
@@ -237,6 +239,7 @@ a {
 }
 .input-group-btn .btn {
     box-shadow: none;
+    border: 1px solid #ccc;
 }
 hr {
     border-top: 1px solid $rosebud;
@@ -417,11 +420,14 @@ html.svg .navbar .navbar-brand {
 
 /* Footer */
 .footer {
-    bottom: 0;
     width: 100%;
     background-color: #FFF;
     box-shadow: $top-z1-shadow;
     border-top: 1px solid $crimson;
+    //border-bottom: 1px solid $crimson;
+    height: $footer-height;
+    position: absolute;
+    bottom: 0;
     > .container-fluid {
         @include page-width();
         padding: 15px;
@@ -440,6 +446,9 @@ html.svg .navbar .navbar-brand {
                 .alignment {
                     text-align: right;
                 }
+            }
+            a i.fa {
+                font-size: 1.25em !important;
             }
         }
     }
@@ -607,6 +616,11 @@ body.home .contact-form-container {
     }
 }
 
+/* Newsletter Sign Up */
+.mc4wp-form .input-group {
+    max-width: 300px;
+}
+
 /* Homepage Blog */
 .display-posts-listing {
     .listing-item {
@@ -668,5 +682,14 @@ article {
             @extend .center-block;
             @include shadow-1();
         }
+    }
+}
+
+/* 404 */
+body.error404 .entry-content {
+    @media (min-width: $screen-sm-min) {
+        width: 71.4285715%;
+        margin-left: auto;
+        margin-right: auto;
     }
 }

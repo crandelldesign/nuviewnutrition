@@ -504,6 +504,13 @@ function contact_form_shortcode()
             <textarea name="message" id="message" class="form-control">' . (isset($form_data) ? $form_data['message'] : '') . '</textarea>
         </div>
         <div class="form-group">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="mc4wp-subscribe" value="1" /> Subscribe to our newsletter.
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
             <button type="submit" class="btn btn-crimson submit-btn">Submit</button>
         </div>
     </form>';
