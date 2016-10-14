@@ -57,7 +57,7 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-7 col-sm-6">
-                            <div class="logo">
+                            <div class="logo" itemscope itemtype="http://schema.org/Organization">
                                 <a href="<?php echo home_url(); ?>">
                                     <img src="<?php echo get_template_directory_uri(); ?>/library/images/nuviewnutrition-logo.png" class="img-responsive logo" alt="<?php bloginfo( 'name' ); ?>">
                                     <img src="<?php echo get_template_directory_uri(); ?>/library/images/nuviewnutrition-logo.svg" class="img-responsive logo svg" alt="<?php bloginfo( 'name' ); ?>">
@@ -82,9 +82,9 @@
                     </div>
                 </div>
 
-                <div class="visible-xs-block text-center">
+                <!--<div class="visible-xs-block text-center hidden">
                     <p><a href="tel:2486255143" class="btn btn-salem"><i class="fa fa-phone" aria-hidden="true"></i> (248) 625-5143</a></p>
-                </div>
+                </div>-->
 
                 <nav class="navbar" itemscope itemtype="http://schema.org/WPHeader">
                     <div class="container-fluid">
@@ -98,10 +98,9 @@
                                     <span class="icon-bar"></span>
                                 </span>
                             </button>
-                            <!--<a class="navbar-brand" href="<?php echo home_url(); ?>" itemscope itemtype="http://schema.org/Organization">
-                                <img src="<?php echo get_template_directory_uri(); ?>/library/images/nuviewnutrition-logo.png" class="img-responsive logo" alt="<?php bloginfo( 'name' ); ?>">
-                                <img src="<?php echo get_template_directory_uri(); ?>/library/images/nuviewnutrition-logo.svg" class="img-responsive logo svg" alt="<?php bloginfo( 'name' ); ?>">
-                            </a>-->
+                            <a class="navbar-brand visible-xs-block" href="tel:2486255143">
+                                <i class="fa fa-phone" aria-hidden="true"></i> (248) 625-5143
+                            </a>
                         </div>
                         <div id="navbar" class="collapse navbar-collapse">
                             <?php
