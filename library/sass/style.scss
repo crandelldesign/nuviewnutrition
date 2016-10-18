@@ -247,6 +247,9 @@ hr {
 label {
     font-weight: 500;
 }
+.dropdown-menu {
+    @include shadow-1();
+}
 
 /* Spacing Elements */
 @mixin generate-spacing-classes(
@@ -345,6 +348,7 @@ nav.navbar {
             }
         }
         .dropdown-menu {
+            background: #FFF;
             > li > a {
                 color: $crimson;
                 &:hover,
@@ -475,6 +479,13 @@ html.svg .navbar .navbar-brand {
     }
 }
 
+/* Admin Menu */
+html #wpadminbar {
+    @media screen and (max-width: 782px) {
+        margin-top: -46px;
+    }
+}
+
 /* Style Guide Header */
 .style-header {
     background-color: #FFF;
@@ -493,6 +504,7 @@ html.svg .navbar .navbar-brand {
         }
     }
 }
+
 /* Color Swatches */
 .color-swatch {
     height: 100px;
@@ -594,7 +606,7 @@ html.svg .navbar .navbar-brand {
     @include shadow-1();
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
-    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+    text-shadow: 4px 4px 4px rgba(2, 41, 19, 0.75);
     @media (max-width: $screen-sm-min) {
         .btn.btn-lg {
             font-size: 14px;
