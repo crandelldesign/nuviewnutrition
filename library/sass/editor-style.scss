@@ -19,6 +19,7 @@ body#tinymce.wp-editor {
 	/* Import Custom Variables and Mixins */
 	@import 'variables';
 	@import 'mixins';
+	@import url(https://fonts.googleapis.com/css?family=Poppins:300,500,400,600,700);
 
 	// normalize: http://necolas.github.io/normalize.css/
 	@import "partials/normalize";
@@ -27,7 +28,7 @@ body#tinymce.wp-editor {
 	@import "partials/variables";
 
 	// typography
-	@import "partials/typography";
+	//@import "partials/typography";
 
 	// Sass functions
 	@import "partials/functions";
@@ -36,7 +37,7 @@ body#tinymce.wp-editor {
 	@import "partials/mixins";
 
 	width: 731px;
-	font-family: $lato;
+	font-family: 'Poppins', sans-serif;
 	font-size: 100%;
 	line-height: 1.5;
 	color: $text-color;

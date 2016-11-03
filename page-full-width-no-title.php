@@ -1,6 +1,6 @@
 <?php
 /*
- Template Name: Full Width Page
+ Template Name: Full Width Page, No Title
  *
  * This is the template for the full width page.
  *
@@ -15,10 +15,6 @@
 	<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 
 	<article id="post-<?php the_ID(); ?>" role="article" itemscope itemtype="http://schema.org/BlogPosting">
-
-		<header class="article-header">
-			<h1 class="page-title" itemprop="headline"><?php the_title(); ?></h1>
-		</header> <?php // end article header ?>
 
 		<section itemprop="articleBody">
 			<?php
