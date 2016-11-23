@@ -20,15 +20,29 @@
 
                     <h1 class="entry-title single-title" itemprop="headline" rel="bookmark"><?php the_title(); ?></h1>
 
-                    <p class="byline entry-meta vcard">
-                        <?php echo the_time('l, F jS, Y'); ?>
-                        <!--<?php printf( __( 'Posted', 'bonestheme' ).' %1$s %2$s',
-                           /* the time the post was published */
-                           '<time class="updated entry-time" datetime="' . get_the_time('Y-m-d') . '" itemprop="datePublished">' . get_the_time(get_option('date_format')) . '</time>',
-                           /* the author of the post */
-                           '<span class="by">'.__( 'by', 'bonestheme' ).'</span> <span class="entry-author author" itemprop="author" itemscope itemptype="http://schema.org/Person">' . get_the_author_link( get_the_author_meta( 'ID' ) ) . '</span>'
-                        ); ?>-->
+                    <?php echo wpfai_social(); ?>
 
+                    <p class="byline entry-meta vcard">
+                        <?php
+                            if (in_category('event') || in_category('class')) {
+                                // First, check if date fields are present.
+                                // This will return an array with formatted dates.
+                                $mem_date = mem_date_processing(
+                                    get_post_meta($post->ID, '_mem_start_date', true) ,
+                                    get_post_meta($post->ID, '_mem_end_date', true)
+                                );
+
+                                // Second step: display the date
+                                if ($mem_date["start-iso"] !=="") { // show the event date
+                                    echo '<span class="event-date">When: ';
+                                    echo $mem_date["date"];
+                                    echo '</span>';
+                                }
+                            } else {
+                                echo 'Posted: ';
+                                echo the_time('l, F jS, Y');
+                            }
+                        ?>
                     </p>
 
                 </header> <?php // end article header ?>
@@ -71,6 +85,8 @@
                     <?php printf( __( 'filed under', 'bonestheme' ).': %1$s', get_the_category_list(', ') ); ?>
 
                     <?php the_tags( '<p class="tags"><span class="tags-title">' . __( 'Tags:', 'bonestheme' ) . '</span> ', ', ', '</p>' ); ?>
+
+                    <?php echo wpfai_social(); ?>
 
                 </footer> <?php // end article footer ?>
 

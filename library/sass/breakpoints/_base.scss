@@ -527,10 +527,10 @@ PAGE NAVI STYLES
       padding: 0.75em;
       min-width: 1em;
       display: block;
-      color: $blue;
+      color: $link-color;
 
       &:hover, &:focus {
-      	background-color: $blue;
+      	background-color: $nav-link-hover-bg;
       	color: $white;
       }
     }

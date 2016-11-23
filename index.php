@@ -3,20 +3,39 @@
 		<div id="inner-content" class="wrap cf">
 			<main id="main" class="m-all t-2of3 d-5of7 cf" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
 
+				<?php if( is_home() && get_option( 'page_for_posts' ) ) { ?>
+					<header class="article-header">
+						<h1 class="entry-title"><?php $posts_page = get_post( get_option( 'page_for_posts' ) ); echo apply_filters( 'the_title', $posts_page->post_title ); ?></h1>
+					</header>
+				<?php } ?>
+
 				<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 					<article id="post-<?php the_ID(); ?>" <?php post_class( 'cf' ); ?> role="article">
 
 						<header class="article-header">
 							<h1 class="h2 entry-title"><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
 							<p class="byline entry-meta vcard">
-								<?php echo the_time('l, F jS, Y'); ?>
-                                <!--<?php printf( __( 'Posted', 'bonestheme' ).' %1$s %2$s',
-       								/* the time the post was published */
-       								'<time class="updated entry-time" datetime="' . get_the_time('Y-m-d') . '" itemprop="datePublished">' . get_the_time(get_option('date_format')) . '</time>',
-       								/* the author of the post */
-       								'<span class="by">'.__( 'by', 'bonestheme').'</span> <span class="entry-author author" itemprop="author" itemscope itemptype="http://schema.org/Person">' . get_the_author_link( get_the_author_meta( 'ID' ) ) . '</span>'
-    							); ?>-->
-							</p>
+			                        <?php
+			                            if (in_category('event') || in_category('class')) {
+			                                // First, check if date fields are present.
+			                                // This will return an array with formatted dates.
+			                                $mem_date = mem_date_processing(
+			                                    get_post_meta($post->ID, '_mem_start_date', true) ,
+			                                    get_post_meta($post->ID, '_mem_end_date', true)
+			                                );
+
+			                                // Second step: display the date
+			                                if ($mem_date["start-iso"] !=="") { // show the event date
+			                                    echo '<span class="event-date">When: ';
+			                                    echo $mem_date["date"];
+			                                    echo '</span>';
+			                                }
+			                            } else {
+			                                echo 'Posted: ';
+			                                echo the_time('l, F jS, Y');
+			                            }
+			                        ?>
+			                    </p>
 						</header>
 
 						<section class="entry-content cf">

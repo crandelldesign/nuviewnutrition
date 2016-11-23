@@ -9,6 +9,8 @@
 
                         <div class="col-sm-6 copyright">
 
+                            <p>7300 Dixie Hwy., Ste. 500, Clarkston, MI 48346<p>
+                            <p>Phone: (248) 625-5143</p>
                             <p>Copyright &copy; <?php echo date('Y'); ?> <?php bloginfo( 'name' ); ?>. All Rights Reserved.</p>
                             <p>Designated trademarks and brands are the property of their respective owners.</p>
                             <p>All graphics are created by Matt Crandell of <a href="http://www.crandelldesign.com" target="_blank">Crandell Design</a>.</p>
@@ -48,7 +50,7 @@
 
 			</footer>
 
-		
+
 
 		<?php // all js scripts are loaded in library/bones.php ?>
 		<?php wp_footer(); ?>

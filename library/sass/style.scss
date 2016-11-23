@@ -16,6 +16,10 @@ http://thesassway.com/advanced/modular-css-naming-conventions
 
 ******************************************************************/
 
+/* Nuview Variables */
+
+@import 'variables';
+@import 'mixins';
 
 
 /*********************
@@ -148,8 +152,6 @@ be set to display none.
 
 }
 
-@import 'variables';
-@import 'mixins';
 @import 'bootstrap';
 @import 'font-awesome';
 @import url(https://fonts.googleapis.com/css?family=Poppins:300,500,400,600,700);
@@ -332,7 +334,9 @@ nav.navbar {
             &:focus {
             }
         }
-        > .active > a {
+        > .active > a,
+        > .current-menu-ancestor > a,
+        > .current-menu-parent > a, {
             &,
             &:hover,
             &:focus {
@@ -682,6 +686,9 @@ article {
         font-size: 14px;
         color: $text-muted;
     }
+    .featured-img {
+        @include shadow-1();
+    }
 }
 
 /* Blog */
@@ -708,5 +715,44 @@ body.error404 .entry-content {
         width: 71.4285715%;
         margin-left: auto;
         margin-right: auto;
+    }
+}
+
+/* Testimonials */
+.easy_t_single_testimonial {
+    blockquote {
+        font-size: $font-size-base;
+        .wp-post-image {
+            display: block;
+            border-radius: 0;
+            margin: 0 1em 1em 0;
+            @media (max-width: $screen-sm-min) {
+                float: none;
+                margin: 0 auto 1em auto;
+            }
+        }
+        .testimonial_body .more-link {
+            color: $link-color;
+            text-decoration: $link-hover-decoration;
+            &:hover {
+                color: $link-hover-color;
+            }
+        }
+        .testimonial_body {
+            max-width: 1000px;
+        }
+        img {
+            @include shadow-1();
+        }
+    }
+}
+
+/* About Us / Meet the Team */
+.meet-the-team-bios {
+    > div {
+        margin-bottom: 25px;
+    }
+    h2 {
+        margin-top: 0;
     }
 }

@@ -360,7 +360,7 @@ function contact_form_shortcode()
     $error   = false;
     $result  = '';
     $testing = 1;
-    if (!($testing) && $_SERVER['REQUEST_METHOD'] == 'POST') {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // set the "required fields" to check
         $required_fields = array(
             "contactname",
@@ -408,7 +408,7 @@ function contact_form_shortcode()
             $has_error['email'] = true;
         }
 
-        $response = verifyCaptcha($_POST['g-recaptcha-response']);
+        /*$response = verifyCaptcha($_POST['g-recaptcha-response']);
 
         if ($response->success) {
 
@@ -416,15 +416,20 @@ function contact_form_shortcode()
             $error = true;
             $result .= "<li>Captcha validation has failed.</li>";
             $has_error['recaptcha'] = true;
-        }
+        }*/
 
         if ($error == false) {
 
             // Add DB Logging Here
+            echo do_shortcode("[cfdb-save-form-post]");
 
             /* Email Admin */
 
-            $htmlEmail = file_get_contents(get_template_directory_uri() . '/assets/html/contact-us.html');
+            $htmlEmail = file_get_contents(get_template_directory_uri() . '/library/html/email.html');
+
+            /* Replace Logo */
+            $logo = get_template_directory_uri().'/library/images/nuviewnutrition-logo-email.jpg';
+            $htmlEmail = str_replace('../images/nuviewnutrition-logo-email.jpg', $logo, $htmlEmail);
 
             $formDataEmail = '<br><table style="color: #636466; font-family: \'Helvetica\' \'Arial\', sans-serif; font-weight: normal; text-align: left; line-height: 19px; font-size: 14px;">
                     <tr>
@@ -446,8 +451,7 @@ function contact_form_shortcode()
                         <td colspan="2">' . $form_data['message'] . '</td>
                     </tr>
                     <tr>
-                        <td>Yes, I would like to receive further communication from Fendt Products.</td>
-                        <td>' . (($form_data['opt_in']) ? 'Yes' : 'No') . '</td>
+                        <td colspan="2">' . (($form_data['mc4wp-subscribe']) ? 'Yes, I would like to subscribe to the newsletter.' : 'No, I would not like to subscribe to the newsletter.') . '</td>
                     </tr>
                 </table>';
 
@@ -455,22 +459,31 @@ function contact_form_shortcode()
 
             $to = 'matt@crandelldesign.com';
             $subject = 'You\'ve Been Contacted By the Nuview Nutrition Website';
+            //$headers = 'From: Nuview Nutrition <info@nuviewnutrition.com>;' . PHP_EOL;
+            $headers[] = 'From: Nuview Nutrition <info@nuviewnutrition.com>';
             $message = $htmlEmail;
 
-            wp_mail( $to, $subject, $message );
+            add_filter('wp_mail_content_type',create_function('', 'return "text/html"; '));
+            if(wp_mail($to,$subject,$message, $headers)) {
+                $result = "Thanks for your e-mail! We'll get back to you as soon as we can.";
+                // ...and switch the $sent variable to TRUE
+                $sent   = true;
+                // Unset form data variable
+                unset($form_data);
+                unset($has_error);
+                ///return true;
+            } else {
+                $error = true;
+                //return false;
+            }
 
             //Setup the client as SES
-            $client = SesClient::factory(array(
+            /*$client = SesClient::factory(array(
                 'region' => 'us-east-1',
                 'credentials' => $credentials
-            ));
+            ));*/
 
-            $result = "Thanks for your e-mail! We'll get back to you as soon as we can.";
-            // ...and switch the $sent variable to TRUE
-            $sent   = true;
-            // Unset form data variable
-            unset($form_data);
-            unset($has_error);
+
 
             //header('Location: '.$_SERVER['HTTP_REFERER'].'?success=Message+Sent+Successfully');
         }
@@ -511,6 +524,7 @@ function contact_form_shortcode()
             </div>
         </div>
         <div class="form-group">
+            <input type="hidden" name="form_title" value="Contact Form">
             <button type="submit" class="btn btn-crimson submit-btn">Submit</button>
         </div>
     </form>';
