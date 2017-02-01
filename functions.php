@@ -349,7 +349,20 @@ function add_slug_body_class($classes)
     }
     return $classes;
 }
-add_filter('body_class', 'add_slug_body_class');
+
+// Testimonial Filter
+add_filter('template_include', 'testimonial_page_template', 99 );
+function testimonial_page_template( $template ) {
+    $uri = $_SERVER["REQUEST_URI"];
+    $uri_array = explode('/',$uri);
+    if ($uri_array[1] == 'testimonial') {
+        $new_template = locate_template( array( 'page-full-width.php' ) );
+        if ( '' != $new_template ) {
+            return $new_template ;
+        }
+    }
+    return $template;
+}
 
 /**
  * Handle Contact Form
@@ -532,6 +545,17 @@ function contact_form_shortcode()
 
 }
 add_shortcode('contact_form', 'contact_form_shortcode');
+
+/* Explore More Shortcode */
+add_shortcode('explore_more', 'explore_more_shortcode');
+function explore_more_shortcode()
+{
+    return '<ul>
+            <li><a href="'. get_site_url(null,'/news-events/blog') .'">Blog</a></li>
+            <li><a href="'. get_site_url(null,'/news-events/classes') .'">Classes</a></li>
+            <li><a href="'. get_site_url(null,'/news-events/events') .'">Events</a></li>
+        </ul>';
+}
 
 /* Remove Social Media Plugin Imports */
 add_action('wp_enqueue_scripts', 'nuview_deregister_styles', PHP_INT_MAX);

@@ -9,8 +9,10 @@
 
                         <div class="col-sm-6 copyright">
 
-                            <p>7300 Dixie Hwy., Ste. 500, Clarkston, MI 48346<p>
-                            <p>Phone: (248) 625-5143</p>
+                            <div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+                            <p><span itemprop="streetAddress">7300 Dixie Hwy., Ste. 500</span>, <span itemprop="addressLocality">Clarkston</span>, <span itemprop="addressRegion">MI</span> <span itemprop="postalCode">48346</span></p>
+                            </div>
+                            <p>Phone: <a href="tel:+12486255143" itemprop="telephone">(248) 625-5143</a></p>
                             <p>Copyright &copy; <?php echo date('Y'); ?> <?php bloginfo( 'name' ); ?>. All Rights Reserved.</p>
                             <p>Designated trademarks and brands are the property of their respective owners.</p>
                             <p>All graphics are created by Matt Crandell of <a href="http://www.crandelldesign.com" target="_blank">Crandell Design</a>.</p>
@@ -27,26 +29,6 @@
                     </div>
 
                 </div>
-
-				<!--<div class="container-fluid">
-
-					<nav role="navigation">
-						<?php wp_nav_menu(array(
-    					'container' => 'div',                           // enter '' to remove nav container (just make sure .footer-links in _base.scss isn't wrapping)
-    					'container_class' => 'footer-links cf',         // class of container (should you choose to use it)
-    					'menu' => __( 'Footer Links', 'bonestheme' ),   // nav name
-    					'menu_class' => 'nav footer-nav cf',            // adding custom nav class
-    					'theme_location' => 'footer-links',             // where it's located in the theme
-    					'before' => '',                                 // before the menu
-    					'after' => '',                                  // after the menu
-    					'link_before' => '',                            // before each link
-    					'link_after' => '',                             // after each link
-    					'depth' => 0,                                   // limit the depth of the nav
-    					'fallback_cb' => 'bones_footer_links_fallback'  // fallback function
-						)); ?>
-					</nav>
-
-				</div>-->
 
 			</footer>
 

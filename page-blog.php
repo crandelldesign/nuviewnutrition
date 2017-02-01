@@ -1,8 +1,8 @@
 <?php
 /*
- Template Name: Classes Page
+ Template Name: Blog Page
  *
- * This is the template for the classes page.
+ * This is the template for the blog page (excludes classes and events).
  *
  * For more info: http://codex.wordpress.org/Page_Templates
 */
@@ -24,30 +24,17 @@
 				<?php endwhile; endif; ?>
 
 				<?php
-					$eventsIdObj = get_category_by_slug('class');
+					$eventsIdObj = get_category_by_slug('event');
 					$eventsId = $eventsIdObj->term_id;
 
-					// We define the current date, using the included function.
-					$mem_today = mem_date_of_today();
-
-					// We set a limit for past events:
-					$mem_date_expiration = ( 365 * DAY_IN_SECONDS );
-					// Here we will display them up to 2 days after they occurred.
-					// Change that number according to your requirements.
-
-					$mem_unix_limit = ( $mem_today["unix"] - $mem_date_expiration );
-					$mem_age_limit = date_i18n( "Y-m-d", $mem_unix_limit);
+					$classesIdObj = get_category_by_slug('class');
+					$classesId = $classesIdObj->term_id;
 
 					// Now, the custom query:
 					$args = array(
-					  'posts_per_page' => 10,
-					  //'meta_key' => '_mem_start_date',
-					  //'meta_value'  => $mem_age_limit,
-					  //'meta_compare'    => '>=',
-					  'orderby'  => 'meta_value',
-					  'order'  => 'ASC',
-					  'ignore_sticky_posts' => true,
-					  'cat' => $eventsId
+					  'posts_per_page' => 5,
+					  'category__not_in' => array($eventsId, $classesId),
+					  'ignore_sticky_posts' => false,
 					);
 
 					$the_query = new WP_Query( $args );
@@ -59,29 +46,8 @@
 
 						<header class="article-header">
 							<h1 class="h2 entry-title"><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
-							<p class="byline entry-meta vcard">
-								<!--<?php echo the_time('l, F jS, Y'); ?>-->
-								<?php
-								// First, check if date fields are present.
-								// This will return an array with formatted dates.
-								$mem_date = mem_date_processing(
-								    get_post_meta($post->ID, '_mem_start_date', true) ,
-								    get_post_meta($post->ID, '_mem_end_date', true)
-								);
-
-								// Second step: display the date
-								if ($mem_date["start-iso"] !=="") { // show the event date
-								    echo '<span class="event-date">';
-								    echo $mem_date["date"];
-								    echo '</span>';
-								}
-								?>
-                                <!--<?php printf( __( 'Posted', 'bonestheme' ).' %1$s %2$s',
-       								/* the time the post was published */
-       								'<time class="updated entry-time" datetime="' . get_the_time('Y-m-d') . '" itemprop="datePublished">' . get_the_time(get_option('date_format')) . '</time>',
-       								/* the author of the post */
-       								'<span class="by">'.__( 'by', 'bonestheme').'</span> <span class="entry-author author" itemprop="author" itemscope itemptype="http://schema.org/Person">' . get_the_author_link( get_the_author_meta( 'ID' ) ) . '</span>'
-    							); ?>-->
+							<p class="byline vcard">
+								<?php printf( __( 'Posted', 'bonestheme').' <time class="updated" datetime="%1$s" itemprop="datePublished">%2$s</time> '.__( 'by',  'bonestheme').' <span class="author">%3$s</span>', get_the_time('Y-m-j'), get_the_time(get_option('date_format')), get_the_author_link( get_the_author_meta( 'ID' ) )); ?>
 							</p>
 						</header>
 
@@ -113,7 +79,7 @@
 
 					<article id="post-not-found" class="hentry cf">
 						<section class="entry-content">
-							<p><?php _e( 'There are not any classes posted. Please check back later.', 'bonestheme' ); ?></p>
+							<p><?php _e( 'There are not any upcoming events. Please check back later.', 'bonestheme' ); ?></p>
 						</section>
 					</article>
 

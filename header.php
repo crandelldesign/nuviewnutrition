@@ -76,7 +76,7 @@
                                     </div>
                                     <p><span class="cindy-name">Cindy Crandell, RN, CN</span><br>
                                     <small>Functional Medicine Nutritionist &amp; Lifestyle Educator</small></p>
-                                    <p><a href="tel:2486255143"><i class="fa fa-phone" aria-hidden="true"></i> (248) 625-5143</a></p>
+                                    <p><a href="tel:2486255143"><i class="fa fa-phone" aria-hidden="true"></i> Call Today <span itemprop="telephone">(248) 625-5143</span></a></p>
 
                                 <div class="clearfix"></div>
                             </div>
@@ -84,9 +84,9 @@
                     </div>
                 </div>
 
-                <!--<div class="visible-xs-block text-center hidden">
+                <?php /*<!--<div class="visible-xs-block text-center hidden">
                     <p><a href="tel:2486255143" class="btn btn-salem"><i class="fa fa-phone" aria-hidden="true"></i> (248) 625-5143</a></p>
-                </div>-->
+                </div>-->*/?>
 
                 <nav class="navbar" itemscope itemtype="http://schema.org/WPHeader">
                     <div class="container-fluid">
@@ -100,7 +100,7 @@
                                     <span class="icon-bar"></span>
                                 </span>
                             </button>
-                            <a class="navbar-brand visible-xs-block" href="tel:2486255143">
+                            <a class="navbar-brand visible-xs-block" href="tel:2486255143" itemprop="telephone">
                                 <i class="fa fa-phone" aria-hidden="true"></i> (248) 625-5143
                             </a>
                         </div>

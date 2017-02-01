@@ -56,7 +56,7 @@
                 <hr>
                 <h1>Buttons</h1>
 
-                <button class="btn btn-lg btn-crimson">This is a large button</button>&nbsp;
+                <button class="btn btn-lg btn-crimson margin-bottom-10">This is a large button</button>&nbsp;
 
                 <div class="visible-xs-block margin-bottom-10"></div>
 
@@ -90,6 +90,24 @@
                 <p><a href="#">This is a link</a> - <a href="#" class="hover">This is a hover link</a></p>
 
                 <p class="details">Font: Poppins 300 #252525</p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <h1>Logo Downloads</h1>
+                <p><a class="btn btn-default" href="<?php echo get_template_directory_uri(); ?>/library/images/logos/nuview-nutrition-logo-jpg.jpg" download="Nuview Nutrition Logo">.JPG</a><br>
+                    <small>Used for web use or in programs such as Microsoft Word. Has a white background.</small></p>
+                <p><a class="btn btn-default" href="<?php echo get_template_directory_uri(); ?>/library/images/logos/nuview-nutrition-logo-png.png" download="Nuview Nutrition Logo">.PNG</a><br>
+                    <small>Used for web use or in programs such as Microsoft Word. Has a transparent background.</small></p>
+                <p><a class="btn btn-default" href="<?php echo get_template_directory_uri(); ?>/library/images/logos/nuview-nutrition-logo-eps.eps" download="Nuview Nutrition Logo">.EPS</a><br>
+                    <small>Used for printing on large items such as posters. Has a transparent background.</small></p>
+                <p><a class="btn btn-default" href="<?php echo get_template_directory_uri(); ?>/library/images/logos/nuview-nutrition-logo-ai.ai" download="Nuview Nutrition Logo">.AI</a><br>
+                    <small>Used for printing on large items such as posters. Has a transparent background.</small></p>
+                <p><a class="btn btn-default" href="<?php echo get_template_directory_uri(); ?>/library/images/logos/nuview-nutrition-logo-svg.svg" download="Nuview Nutrition Logo">.SVG</a><br>
+                    <small>Used for printing on large items such as posters. Has a transparent background.</small></p>
+                <p><a class="btn btn-default" href="<?php echo get_template_directory_uri(); ?>/library/images/logos/nuview-nutrition-logo-pdf.pdf" download="Nuview Nutrition Logo">.PDF</a><br>
+                    <small>Used for printing on large items such as posters. Has a transparent background.</small></p>
             </div>
         </div>
 
