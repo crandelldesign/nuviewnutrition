@@ -15,7 +15,7 @@
                             <p>Phone: <a href="tel:+12486255143" itemprop="telephone">(248) 625-5143</a></p>
                             <p>Copyright &copy; <?php echo date('Y'); ?> <?php bloginfo( 'name' ); ?>. All Rights Reserved.</p>
                             <p>Designated trademarks and brands are the property of their respective owners.</p>
-                            <p>All graphics are created by Matt Crandell of <a href="http://www.crandelldesign.com" target="_blank">Crandell Design</a>.</p>
+                            <p>Website and some graphics are created by Matt Crandell of <a href="http://www.crandelldesign.com" target="_blank">Crandell Design</a>.</p>
 
                         </div>
 
@@ -31,6 +31,8 @@
                 </div>
 
 			</footer>
+
+            <button type="button" id="back-to-top" class="btn btn-primary btn-lg back-to-top"><i class="fa fa-angle-up" aria-hidden="true"></i></button>
 
 
 

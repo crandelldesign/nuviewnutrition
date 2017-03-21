@@ -38,14 +38,23 @@
             <?php
                 }
                 if ($uri_array[1] == 'specialties' && strlen($uri_array[2]) > 0) {
-            ?>
+                    $ancestors = array_reverse(get_ancestors($post->ID, 'page'));
+                    ?>
                     <ol class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
                         <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
                             <a itemprop="item" href="<?php echo get_site_url(null,'/') ?>"><span itemprop="name">Home</span></a>
                         </li>
+                    <?php
+                    foreach ($ancestors as $ancestor) {
+                    ?>
                         <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
-                            <a itemprop="item" href="<?php echo get_site_url(null,'/specialties') ?>"><span itemprop="name">Specialties</span></a>
+                            <a href="<?php echo get_permalink( $ancestor ); ?>" >
+                                <?php echo get_the_title( $ancestor ); ?>
+                            </a>
                         </li>
+                    <?php
+                    }
+                    ?>
                         <li class="active"><?php the_title(); ?></li>
                     </ol>
             <?php

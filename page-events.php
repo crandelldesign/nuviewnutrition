@@ -10,14 +10,16 @@
 
 <?php get_header(); ?>
 	<div id="content">
-		<div id="inner-content" class="wrap cf">
-			<main id="main" class="m-all t-2of3 d-5of7 cf" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
+		<div id="inner-content" class="row">
+            <main id="main" class="col-sm-8" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
 
 				<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 
 				<header class="article-header">
 					<h1 class="page-title" itemprop="headline"><?php the_title(); ?></h1>
 				</header> <?php // end article header ?>
+
+				<?php get_template_part('breadcrumbs'); ?>
 
 				<?php the_content(); ?>
 
@@ -39,6 +41,7 @@
 					$mem_age_limit = date_i18n( "Y-m-d", $mem_unix_limit);
 
 					// Now, the custom query:
+					$paged = ( get_query_var('paged') ) ? get_query_var('paged') : 1;
 					$args = array(
 					  'posts_per_page' => 5,
 					  'meta_key' => '_mem_start_date',
@@ -47,7 +50,8 @@
 					  'orderby'  => 'meta_value',
 					  'order'  => 'ASC',
 					  'ignore_sticky_posts' => true,
-					  'cat' => $eventsId
+					  'cat' => $eventsId,
+					  'paged' => $paged
 					);
 
 					$the_query = new WP_Query( $args );
@@ -107,7 +111,11 @@
 
 				<?php endwhile; ?>
 
-					<?php bones_page_navi(); ?>
+					<?php
+                        if (function_exists(custom_pagination)) {
+                            custom_pagination($the_query->max_num_pages,"",$paged);
+                        }
+                    ?>
 
 				<?php else : ?>
 

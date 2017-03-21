@@ -161,8 +161,18 @@ function bones_register_sidebars()
 {
     register_sidebar(array(
         'id' => 'sidebar1',
-        'name' => __('Sidebar 1', 'bonestheme'),
+        'name' => __('Main Sidebar', 'bonestheme'),
         'description' => __('The first (primary) sidebar.', 'bonestheme'),
+        'before_widget' => '<div id="%1$s" class="widget %2$s">',
+        'after_widget' => '</div>',
+        'before_title' => '<h4 class="widgettitle">',
+        'after_title' => '</h4>'
+    ));
+
+    register_sidebar(array(
+        'id' => 'mobile_sidebar',
+        'name' => __('Mobile Menu', 'bonestheme'),
+        'description' => __('The mobile menu area.', 'bonestheme'),
         'before_widget' => '<div id="%1$s" class="widget %2$s">',
         'after_widget' => '</div>',
         'before_title' => '<h4 class="widgettitle">',
@@ -470,7 +480,7 @@ function contact_form_shortcode()
 
             $htmlEmail = str_replace('!*data*!', $formDataEmail, $htmlEmail);
 
-            $to = 'matt@crandelldesign.com';
+            $to = 'info@nuviewnutrition.com';
             $subject = 'You\'ve Been Contacted By the Nuview Nutrition Website';
             //$headers = 'From: Nuview Nutrition <info@nuviewnutrition.com>;' . PHP_EOL;
             $headers[] = 'From: Nuview Nutrition <info@nuviewnutrition.com>';
@@ -552,9 +562,20 @@ function explore_more_shortcode()
 {
     return '<ul>
             <li><a href="'. get_site_url(null,'/news-events/blog') .'">Blog</a></li>
-            <li><a href="'. get_site_url(null,'/news-events/classes') .'">Classes</a></li>
+            <li><a href="'. get_site_url(null,'/classes') .'">Classes</a></li>
             <li><a href="'. get_site_url(null,'/news-events/events') .'">Events</a></li>
         </ul>';
+}
+
+/* Explore More Shortcode */
+add_shortcode('explore_more_button_group', 'explore_more_button_group_shortcode');
+function explore_more_button_group_shortcode()
+{
+    return '<div class="btn-group btn-group-justified margin-bottom-15" role="group">
+            <a class="btn btn-crimson-outline" href="'. get_site_url(null,'/news-events/blog') .'">Blog</a>
+            <a class="btn btn-crimson-outline" href="'. get_site_url(null,'/classes') .'">Classes</a>
+            <a class="btn btn-crimson-outline" href="'. get_site_url(null,'/news-events/events') .'">Events</a>
+        </div>';
 }
 
 /* Remove Social Media Plugin Imports */
@@ -562,6 +583,51 @@ add_action('wp_enqueue_scripts', 'nuview_deregister_styles', PHP_INT_MAX);
 function nuview_deregister_styles()  {
     wp_dequeue_style('css_for_fa_icon');
     wp_deregister_style('css_for_fa_icon');
+}
+
+/* Custom Pagination */
+function custom_pagination($numpages = '', $pagerange = '', $paged='')
+{
+    if (empty($pagerange)) {
+        $pagerange = 2;
+    }
+
+    if ($wp_query->max_num_pages <= 1)
+        //return;
+
+    /**
+    * This first part of our function is a fallback
+    * for custom pagination inside a regular loop that
+    * uses the global $paged and global $wp_query variables.
+    *
+    * It's good because we can now override default pagination
+    * in our theme, and use this function in default quries
+    * and custom queries.
+    */
+    global $paged;
+    if (empty($paged)) {
+        $paged = 1;
+    }
+    if ($numpages == '') {
+        global $wp_query;
+        $numpages = $wp_query->max_num_pages;
+        if(!$numpages) {
+            $numpages = 1;
+        }
+    }
+    echo '<nav class="pagination">';
+    echo paginate_links(array(
+        'base' => get_pagenum_link(1) . '%_%',
+        'format' => 'page/%#%',
+        'total' => $numpages,
+        'current' => $paged,
+        'prev_text' => '&larr;',
+        'next_text' => '&rarr;',
+        'type' => 'list',
+        'end_size' => 3,
+        'mid_size' => 3
+    ));
+    echo '</nav>';
 }
 
 /* DON'T DELETE THIS CLOSING TAG */

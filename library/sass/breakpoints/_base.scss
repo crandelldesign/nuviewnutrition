@@ -252,9 +252,9 @@ POSTS & CONTENT STYLES
 *********************/
 
 #content {
-	margin-top: 1.5em;
+	//margin-top: 1.5em;
 }
-
+	body.blog, body.page {
 		.hentry {
 			background-color: $white;
 			border-radius: 3px;
@@ -276,6 +276,7 @@ POSTS & CONTENT STYLES
 			}
 
 		} /* end .hentry */
+	}
 
 		.single-title,
 		.page-title,
