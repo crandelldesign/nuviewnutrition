@@ -499,16 +499,6 @@ function contact_form_shortcode()
                 $error = true;
                 //return false;
             }
-
-            //Setup the client as SES
-            /*$client = SesClient::factory(array(
-                'region' => 'us-east-1',
-                'credentials' => $credentials
-            ));*/
-
-
-
-            //header('Location: '.$_SERVER['HTTP_REFERER'].'?success=Message+Sent+Successfully');
         }
     }
 
@@ -545,6 +535,9 @@ function contact_form_shortcode()
                     <input type="checkbox" name="mc4wp-subscribe" value="1" /> Subscribe to our newsletter.
                 </label>
             </div>
+        </div>
+        <div class="form-group">
+            '.(( function_exists( 'gglcptch_display' ) ) ? gglcptch_display() :'').'
         </div>
         <div class="form-group">
             <input type="hidden" name="form_title" value="Contact Form">
@@ -629,6 +622,48 @@ function custom_pagination($numpages = '', $pagerange = '', $paged='')
     ));
     echo '</nav>';
 }
+
+// Buffer
+function add_buffer_button_on_published($post) {
+    if(get_post_status($post->ID) != 'publish') {
+        return;
+    }
+
+    $html = '<a href="https://buffer.com/add/?url=' . get_permalink($post) . '&text=' . get_the_title($post) . '" class="button button-small button-buffer">' . 'Buffer</a>';
+
+    echo $html;
+}
+add_action('edit_form_after_title', 'add_buffer_button_on_published');
+function add_buffer_column_on_list($columns) {
+    return array_merge($columns, array('buffer'=>'Buffer'));
+}
+add_filter('manage_post_posts_columns' , 'add_buffer_column_on_list');
+add_filter('manage_page_posts_columns' , 'add_buffer_column_on_list');
+function add_buffer_button_on_list($column, $post_id) {
+    switch ($column) {
+        case 'buffer':
+            if(get_post_status($post_id) == 'publish') {
+                $html = '<a href="https://buffer.com/add/?url=' . get_permalink($post_id) . '&text=' . get_the_title($post_id) . '" class="button button-small button-buffer">' . 'Buffer</a>';
+                echo $html;
+            }
+            break;
+    }
+}
+add_action( 'manage_posts_custom_column' , 'add_buffer_button_on_list', 10, 2 );
+add_action( 'manage_pages_custom_column' , 'add_buffer_button_on_list', 10, 2 );
+
+function add_admin_scripts() {
+    $screen = get_current_screen();
+
+    if(in_array($screen->id, array('post', 'page', 'edit-post', 'edit-page'))) {
+        wp_enqueue_script('buffer_dialog', get_template_directory_uri() . '/library/js/buffer-dialog.js', 'jquery');
+    }
+
+    /*if(in_array($screen->id, array('edit-post', 'edit-page'))) {
+        wp_enqueue_style('custom-admin', get_template_directory_uri() . '/css/custom-admin.css');
+    }*/
+}
+add_action( 'admin_enqueue_scripts', 'add_admin_scripts' );
 
 /* DON'T DELETE THIS CLOSING TAG */
 ?>

@@ -49,7 +49,7 @@
                             )
                         ),
                         'orderby'  => 'meta_value',
-                        'order'  => 'DESC', // DESC = newest first, ASC = oldest first
+                        'order'  => 'ASC', // DESC = newest first, ASC = oldest first
                         'ignore_sticky_posts' => true,
                         'cat' => $eventsId,
                         'paged' => $paged
