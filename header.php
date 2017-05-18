@@ -84,7 +84,7 @@
                                         <img src="<?php echo get_template_directory_uri(); ?>/library/images/cindy.jpg" class="img-responsive img-circle" alt="Cindy Crandell, RN, CN">
                                     </div>
                                     <p><span class="cindy-name">Cindy Crandell, RN, CN</span><br>
-                                    <small>Functional Medicine Nutritionist &amp; Lifestyle Educator</small></p>
+                                    <small>Owner/Founder, Functional Medicine Nutritionist &amp; Lifestyle Educator</small></p>
                                     <p><a href="tel:2486255143"><i class="fa fa-phone" aria-hidden="true"></i> Call Today <span itemprop="telephone">(248) 625-5143</span></a></p>
 
                                 <div class="clearfix"></div>

@@ -20,7 +20,8 @@
                             <h1 class="h2 entry-title"><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
                             <p class="byline entry-meta vcard">
                                     <?php
-                                        if (in_category('event') || in_category('class')) {
+                                        /*if (in_category('event') || in_category('class')) {*/
+                                        if (in_category('class')) {
                                             // First, check if date fields are present.
                                             // This will return an array with formatted dates.
                                             $mem_date = mem_date_processing(

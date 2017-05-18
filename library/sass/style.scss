@@ -777,6 +777,20 @@ body.home .contact-form-container {
         //max-width: 250px;
         margin-left: auto;
         margin-right: auto;
+
+    }
+    .form-group {
+        @extend .form-group-sm;
+        margin-bottom: 5px;
+        label {
+            font-size: 14px;
+        }
+        .g-recaptcha {
+            transform:scale(0.77);
+            -webkit-transform:scale(0.77);
+            transform-origin:0 0;
+            -webkit-transform-origin:0 0;
+        }
     }
 }
 

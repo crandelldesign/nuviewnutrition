@@ -7,6 +7,9 @@ This is where you can drop your custom functions or
 just edit things like thumbnail sizes, header images,
 sidebars, comments, etc.
 */
+require __DIR__.'/vendor/autoload.php';
+$dotenv = new Dotenv\Dotenv(__DIR__);
+$dotenv->load();
 
 // LOAD BONES CORE (if you remove this, the theme will break)
 require_once('library/bones.php');
@@ -374,15 +377,51 @@ function testimonial_page_template( $template ) {
     return $template;
 }
 
+/* Recaptcha Verification */
+function verifyCaptcha($googleResp){
+    $fields = array(
+        'secret' => urlencode(getenv('RECAPTCHA_SECRETKEY')),
+        'response' => urlencode($googleResp),
+        'remoteip' => urlencode($_SERVER['REMOTE_ADDR'])
+    );
+
+    $fields_string = '';
+
+    //url-ify the data for the POST
+    foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
+    rtrim($fields_string, '&');
+
+
+    //Initialize curl
+    $ch = curl_init();
+
+    //Set URL and other appropriate options
+    curl_setopt($ch, CURLOPT_URL, 'https://www.google.com/recaptcha/api/siteverify');
+    curl_setopt($ch, CURLOPT_POST, count($fields));
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HEADER, false);
+
+    //Grab URL and pass it to the browser
+    $response = curl_exec($ch);
+
+    //Close cURL resource, and free up system resources
+    curl_close($ch);
+
+    $response = json_decode($response);
+
+    return $response;
+}
+
 /**
  * Handle Contact Form
  *
  */
 function contact_form_shortcode()
 {
+    //wp_enqueue_script('googlerecaptcha', 'https://www.google.com/recaptcha/api.js');
     $error   = false;
     $result  = '';
-    $testing = 1;
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // set the "required fields" to check
         $required_fields = array(
@@ -431,15 +470,13 @@ function contact_form_shortcode()
             $has_error['email'] = true;
         }
 
-        /*$response = verifyCaptcha($_POST['g-recaptcha-response']);
-
-        if ($response->success) {
-
-        } else {
+        /* Verify Captcha */
+        $response = verifyCaptcha($_POST['g-recaptcha-response']);
+        if (!$response->success) {
             $error = true;
             $result .= "<li>Captcha validation has failed.</li>";
             $has_error['recaptcha'] = true;
-        }*/
+        }
 
         if ($error == false) {
 
@@ -484,6 +521,7 @@ function contact_form_shortcode()
             $subject = 'You\'ve Been Contacted By the Nuview Nutrition Website';
             //$headers = 'From: Nuview Nutrition <info@nuviewnutrition.com>;' . PHP_EOL;
             $headers[] = 'From: Nuview Nutrition <info@nuviewnutrition.com>';
+            $headers[] = 'Bcc: Matt Crandell <matt@crandelldesign.com>';
             $message = $htmlEmail;
 
             add_filter('wp_mail_content_type',create_function('', 'return "text/html"; '));
@@ -511,6 +549,11 @@ function contact_form_shortcode()
         $info = '<div class="alert alert-success">' . $result . '</div>';
     }
 
+    ob_start();
+        do_action('google_invre_render_widget_action');
+        $recaptcha = ob_get_contents();
+    ob_end_clean();
+
     $admin_post_url = esc_url(admin_url("admin-post.php"));
     $email_form     = '<form class="contact-form" action="' . get_permalink() . '#contact" method="post">
         <div class="form-group' . ((isset($has_error['contactname']) && $has_error['contactname']) ? ' has-error' : '') . '">
@@ -527,7 +570,7 @@ function contact_form_shortcode()
         </div>
         <div class="form-group' . ((isset($has_error['message']) && $has_error['message']) ? ' has-error' : '') . '">
             <label for="message">Your Message</label>
-            <textarea name="message" id="message" class="form-control">' . (isset($form_data) ? $form_data['message'] : '') . '</textarea>
+            <textarea name="message" id="message" class="form-control" rows="3">' . (isset($form_data) ? $form_data['message'] : '') . '</textarea>
         </div>
         <div class="form-group">
             <div class="checkbox">
@@ -537,7 +580,7 @@ function contact_form_shortcode()
             </div>
         </div>
         <div class="form-group">
-            '.(( function_exists( 'gglcptch_display' ) ) ? gglcptch_display() :'').'
+            <div class="g-recaptcha" data-sitekey="'.getenv('RECAPTCHA_SITEKEY').'"></div>
         </div>
         <div class="form-group">
             <input type="hidden" name="form_title" value="Contact Form">
@@ -664,6 +707,35 @@ function add_admin_scripts() {
     }*/
 }
 add_action( 'admin_enqueue_scripts', 'add_admin_scripts' );
+
+// Comment Customization
+function wpb_move_comment_field_to_bottom( $fields ) {
+    $comment_field = $fields['comment'];
+    unset( $fields['comment'] );
+    $fields['comment'] = $comment_field;
+    return $fields;
+}
+add_filter( 'comment_form_fields', 'wpb_move_comment_field_to_bottom' );
+
+// Recaptcha on Comments
+function frontend_recaptcha_script() {
+    wp_register_script("recaptcha", "https://www.google.com/recaptcha/api.js");
+    wp_enqueue_script("recaptcha");
+}
+add_action("wp_enqueue_scripts", "frontend_recaptcha_script");
+function verify_comment_captcha( $commentdata ) {
+    if (isset($_POST['g-recaptcha-response'])) {
+        $response = verifyCaptcha($_POST['g-recaptcha-response']);
+        if ($response->success) {
+            return $commentdata;
+        } else {
+            wp_die("<strong>ERROR</strong>: Please check the recaptcha box.", 'Recaptcha Error', array('response' => 200, 'back_link' => true));
+        }
+    } else {
+        wp_die("<strong>ERROR</strong>: Please check the recaptcha box.", 'Recaptcha Error', array('response' => 200, 'back_link' => true));
+    }
+}
+add_filter("preprocess_comment", "verify_comment_captcha", 10, 2 );
 
 /* DON'T DELETE THIS CLOSING TAG */
 ?>
