@@ -70,8 +70,8 @@
                         <div class="col-md-7 col-sm-6">
                             <div class="logo" itemscope itemtype="http://schema.org/Organization">
                                 <a href="<?php echo home_url(); ?>">
-                                    <img src="<?php echo get_template_directory_uri(); ?>/library/images/nuviewnutrition-logo.png" class="img-responsive logo" alt="<?php bloginfo( 'name' ); ?>">
-                                    <img src="<?php echo get_template_directory_uri(); ?>/library/images/nuviewnutrition-logo.svg" class="img-responsive logo svg" alt="<?php bloginfo( 'name' ); ?>">
+                                    <img src="<?php echo get_template_directory_uri(); ?>/library/images/nuviewnutrition-logo.png" class="img-responsive logo" alt="<?php bloginfo( 'name' ); ?>" width="350" height="208">
+                                    <img src="<?php echo get_template_directory_uri(); ?>/library/images/nuviewnutrition-logo.svg" class="img-responsive logo svg" alt="<?php bloginfo( 'name' ); ?>" width="350" height="208">
                                 </a>
                             </div>
                         </div>

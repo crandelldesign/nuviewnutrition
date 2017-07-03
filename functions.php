@@ -302,7 +302,7 @@ and be up and running in seconds.
 */
 function bones_fonts()
 {
-    wp_enqueue_style('googleFonts', '//fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic');
+    //wp_enqueue_style('googleFonts', '//fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic');
 }
 
 add_action('wp_enqueue_scripts', 'bones_fonts');
@@ -719,8 +719,8 @@ add_filter( 'comment_form_fields', 'wpb_move_comment_field_to_bottom' );
 
 // Recaptcha on Comments
 function frontend_recaptcha_script() {
-    wp_register_script("recaptcha", "https://www.google.com/recaptcha/api.js");
-    wp_enqueue_script("recaptcha");
+    wp_register_script('recaptcha', 'https://www.google.com/recaptcha/api.js', array(), '', true);
+    wp_enqueue_script('recaptcha');
 }
 add_action("wp_enqueue_scripts", "frontend_recaptcha_script");
 function verify_comment_captcha( $commentdata ) {
