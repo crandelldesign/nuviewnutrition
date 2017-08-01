@@ -597,9 +597,9 @@ add_shortcode('explore_more', 'explore_more_shortcode');
 function explore_more_shortcode()
 {
     return '<ul>
-            <li><a href="'. get_site_url(null,'/news-events/blog') .'">Blog</a></li>
+            <li><a href="'. get_site_url(null,'/blog-events/blog') .'">Blog</a></li>
             <li><a href="'. get_site_url(null,'/classes') .'">Classes</a></li>
-            <li><a href="'. get_site_url(null,'/news-events/events') .'">Events</a></li>
+            <li><a href="'. get_site_url(null,'/blog-events/events') .'">Events</a></li>
         </ul>';
 }
 
@@ -608,9 +608,9 @@ add_shortcode('explore_more_button_group', 'explore_more_button_group_shortcode'
 function explore_more_button_group_shortcode()
 {
     return '<div class="btn-group btn-group-justified margin-bottom-15" role="group">
-            <a class="btn btn-crimson-outline" href="'. get_site_url(null,'/news-events/blog') .'">Blog</a>
+            <a class="btn btn-crimson-outline" href="'. get_site_url(null,'/blog-events/blog') .'">Blog</a>
             <a class="btn btn-crimson-outline" href="'. get_site_url(null,'/classes') .'">Classes</a>
-            <a class="btn btn-crimson-outline" href="'. get_site_url(null,'/news-events/events') .'">Events</a>
+            <a class="btn btn-crimson-outline" href="'. get_site_url(null,'/blog-events/events') .'">Events</a>
         </div>';
 }
 

@@ -24,14 +24,14 @@ foreach ($ancestors as $ancestor) {
 if (is_single()) {
     ?>
     <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
-        <a itemprop="item" href="<?php echo get_site_url(null,'/news-events/') ?>"><span itemprop="name">News &amp; Events</span></a>
+        <a itemprop="item" href="<?php echo get_site_url(null,'/blog-events/') ?>"><span itemprop="name">Blog &amp; Events</span></a>
     </li>
     <?php
     if (in_category( $classesId))
     {
         ?>
         <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
-            <a itemprop="item" href="<?php echo get_site_url(null,'/news-events/classes/') ?>"><span itemprop="name">Classes</span></a>
+            <a itemprop="item" href="<?php echo get_site_url(null,'/blog-events/classes/') ?>"><span itemprop="name">Classes</span></a>
         </li>
         <?php
     }
@@ -39,7 +39,7 @@ if (is_single()) {
     {
         ?>
         <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
-            <a itemprop="item" href="<?php echo get_site_url(null,'/news-events/events/') ?>"><span itemprop="name">Events</span></a>
+            <a itemprop="item" href="<?php echo get_site_url(null,'/blog-events/events/') ?>"><span itemprop="name">Events</span></a>
         </li>
         <?php
     }
@@ -47,7 +47,7 @@ if (is_single()) {
     {
         ?>
         <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
-            <a itemprop="item" href="<?php echo get_site_url(null,'/news-events/blog/') ?>"><span itemprop="name">Blog</span></a>
+            <a itemprop="item" href="<?php echo get_site_url(null,'/blog-events/blog/') ?>"><span itemprop="name">Blog</span></a>
         </li>
         <?php
     }
