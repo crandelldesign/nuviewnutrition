@@ -45,6 +45,18 @@
 		<?php wp_head(); ?>
 		<?php // end of wordpress head ?>
 
+        <!-- Hotjar Tracking Code for https://www.nuviewnutrition.com -->
+        <script>
+            (function(h,o,t,j,a,r){
+                h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+                h._hjSettings={hjid:630815,hjsv:5};
+                a=o.getElementsByTagName('head')[0];
+                r=o.createElement('script');r.async=1;
+                r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+                a.appendChild(r);
+            })(window,document,'//static.hotjar.com/c/hotjar-','.js?sv=');
+        </script>
+
 		<?php // drop Google Analytics Here ?>
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -78,7 +90,7 @@
                         <div class="col-md-5 col-sm-6 hidden-xs">
                             <div class="cindy">
                                     <div class="pull-right">
-                                        <img src="<?php echo get_template_directory_uri(); ?>/library/images/clarkston-best-of-the-best-2016.jpg" class="img-responsive img-award" alt="2016 Best of the Best">
+                                        <img src="<?php echo get_template_directory_uri(); ?>/library/images/clarkston-best-of-the-best-2017.jpg" class="img-responsive img-award" alt="2017 Best of the Best">
                                     </div>
                                     <div class="pull-right">
                                         <img src="<?php echo get_template_directory_uri(); ?>/library/images/cindy.jpg" class="img-responsive img-circle" alt="Cindy Crandell, RN, CN">

@@ -737,5 +737,14 @@ function verify_comment_captcha( $commentdata ) {
 }
 add_filter("preprocess_comment", "verify_comment_captcha", 10, 2 );
 
+//SSL/HTTPS
+function check_if_https() {
+    if ( !is_ssl() ) {
+        wp_redirect('https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'], 301 );
+        exit();
+    }
+}
+add_action ( 'template_redirect', 'check_if_https', 1 );
+
 /* DON'T DELETE THIS CLOSING TAG */
 ?>
