@@ -1,0 +1,45 @@
+// Footer
+body {
+    @media (min-width: $screen-md-min) {
+        //position: relative;
+        margin-bottom: $footer-height;
+    }
+}
+.footer {
+    width: 100%;
+    background-color: #FFF;
+    box-shadow: $top-z1-shadow;
+    border-top: 1px solid $crimson;
+    @media (min-width: $screen-md-min) {
+        height: $footer-height;
+        position: absolute;
+        bottom: 0;
+    }
+    > .container-fluid {
+        @include page-width();
+        padding: 15px;
+        .copyright {
+            color: $black;
+            //text-align: center;
+            font-size: 10px;
+            @media (min-width: $screen-sm-min) {
+                font-size: 12px;
+            }
+        }
+        .widget {
+            padding: 0;
+            margin: 0;
+            @media (min-width: $screen-sm-min) {
+                .alignment {
+                    text-align: right;
+                }
+            }
+            a i.fa {
+                font-size: 1.25em !important;
+            }
+        }
+    }
+    p {
+        margin-bottom: 2px;
+    }
+}

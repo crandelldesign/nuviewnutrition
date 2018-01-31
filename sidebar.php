@@ -1,21 +1,18 @@
-				<div id="sidebar1" class="sidebar col-sm-4" role="complementary">
+<?php
+/*
+* This is the base sidebar template. If you add an additional sidebar called 'sidebar2'
+* and want to make changes to your sidebar, copy this template to a file called
+* 'sidebar-sidebar2.php'.
+*
+*/
+?>
 
-					<?php if ( is_active_sidebar( 'sidebar1' ) ) : ?>
+<div id="sidebar1" class="sidebar col-sm-4" role="complementary">
 
-						<?php dynamic_sidebar( 'sidebar1' ); ?>
+	<?php if ( is_active_sidebar( 'sidebar1' ) ) : ?>
 
-					<?php else : ?>
+		<?php dynamic_sidebar( 'sidebar1' ); ?>
 
-						<?php
-							/*
-							 * This content shows up if there are no widgets defined in the backend.
-							*/
-						?>
+	<?php endif; ?>
 
-						<div class="no-widgets">
-							<p><?php _e( 'This is a widget ready area. Add some and they will appear here.', 'bonestheme' );  ?></p>
-						</div>
-
-					<?php endif; ?>
-
-				</div>
+</div>

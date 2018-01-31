@@ -1,36 +1,46 @@
 <?php get_header(); ?>
+	
+	<div id="content">
 
-			<div id="content">
+		<div id="inner-content" class="wrap cf">
 
+			<main id="main" class="m-all t-all d-all cf" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
 
-						<article id="post-not-found">
+				<article id="post-not-found" class="hentry cf">
 
-							<header class="article-header">
+					<header class="article-header">
 
-								<h1><?php _e( '404 Error - Page Not Found', 'bonestheme' ); ?></h1>
+						<?php get_template_part( 'templates/header', 'title'); ?>
 
-							</header>
+					</header>
 
-							<section class="entry-content">
+					<section class="entry-content">
 
-								<p><?php _e( 'The page or post you were looking for was not found, but maybe try looking again!', 'bonestheme' ); ?></p>
+						<div class="404-txt">
 
-								<div class="search">
-									<p><?php get_search_form(); ?></p>
-								</div>
+							<h3><?php _e( 'I\'m sorry Dave, I\'m afraid I can\'t do that.', 'templatetheme' ); ?></h3>
+							<p>We couldn't find what you are looking for, please try searching.</p>
 
-							</section>
+						</div>
 
-							
+					</section>
 
-							<!--<footer class="article-footer">
+					<section class="search">
 
-									<p><?php /*_e( 'This is the 404.php template.', 'bonestheme' );*/ ?></p>
+							<p><?php get_search_form(); ?></p>
 
-							</footer>-->
+					</section>
 
-						</article>
+					<footer class="article-footer">
 
-			</div>
+					</footer>
+
+				</article>
+
+			</main>
+
+		</div>
+
+	</div>
 
 <?php get_footer(); ?>

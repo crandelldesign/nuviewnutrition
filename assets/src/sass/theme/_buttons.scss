@@ -1,0 +1,38 @@
+// Buttons
+.btn {
+    @include shadow-1();
+}
+.btn-crimson {
+    background-color: $crimson;
+    color: #FFF;
+    border: 1px solid #FFF;
+    &:hover, &:focus {
+        background-color: $shiraz;
+        color: #FFF;
+    }
+}
+.btn-salem {
+    background-color: $salem;
+    color: #FFF;
+    border: 1px solid #FFF;
+    &:hover, &:focus {
+        background-color: $malachite;
+        color: #FFF;
+    }
+}
+.btn-crimson-outline {
+    background-color: #FFF;
+    color: $crimson;
+    border: 1px solid $crimson;
+    &:hover, &:focus {
+        background-color: $crimson;
+        color: #FFF;
+    }
+}
+.btn-group .btn {
+    box-shadow: none;
+}
+.input-group-btn .btn {
+    box-shadow: none;
+    border: 1px solid #ccc;
+}

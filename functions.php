@@ -1,85 +1,89 @@
 <?php
-/*
-Author: Eddie Machado
-URL: http://themble.com/bones/
+/*------------------------------------
+ * Theme: Plate by studio.bio
+ * File: Main functions file
+ * Author: Joshua Michaels
+ * URI: https://studio.bio/themes/plate
+ *------------------------------------
+ *
+ * We've moved all of the theme functions to this single
+ * file to keep things tidy.
+ *
+ * Extra development and debugging functions can be found
+ * in template.php. Uncomment the below require_once below.
+ *
+ */
 
-This is where you can drop your custom functions or
-just edit things like thumbnail sizes, header images,
-sidebars, comments, etc.
-*/
+// Load Env File
 require __DIR__.'/vendor/autoload.php';
 $dotenv = new Dotenv\Dotenv(__DIR__);
 $dotenv->load();
 
-// LOAD BONES CORE (if you remove this, the theme will break)
-require_once('library/bones.php');
 
-// CUSTOMIZE THE WORDPRESS ADMIN (off by default)
-// require_once( 'library/admin.php' );
+/* LOAD TEMPLATE DEVELOPMENT FUNCTIONS
+(not required but helper stuff for debugging and development)
+*/
+//require_once( 'library/template.php' );
+
+/* CUSTOMIZE THE WORDPRESS ADMIN
+(also not required so comment it out if you don't need it)
+*/
+require_once( 'library/admin.php' );
 
 /*********************
-LAUNCH BONES
+LAUNCH TEMPLATE
 Let's get everything up and running.
 *********************/
 
-function bones_ahoy()
-{
+function template_launch() {
 
-    //Allow editor style.
-    add_editor_style(get_stylesheet_directory_uri() . '/library/css/editor-style.css');
+  //Allow editor style.
+  add_editor_style( get_stylesheet_directory_uri() . '/assets/css/editor-style.css' );
 
-    // let's get language support going, if you need it
-    load_theme_textdomain('bonestheme', get_template_directory() . '/library/translation');
+  // let's get language support going, if you need it
+  //load_theme_textdomain( 'templatetheme', get_template_directory() . '/library/translation' );
 
-    // USE THIS TEMPLATE TO CREATE CUSTOM POST TYPES EASILY
-    require_once('library/custom-post-type.php');
+  // launching operation cleanup
+  add_action( 'init', 'template_head_cleanup' );
+  // A better title
+  add_filter( 'wp_title', 'rw_title', 10, 3 );
+  // remove WP version from RSS
+  add_filter( 'the_generator', 'template_rss_version' );
+  // remove pesky injected css for recent comments widget
+  add_filter( 'wp_head', 'template_remove_wp_widget_recent_comments_style', 1 );
+  // clean up comment styles in the head
+  add_action( 'wp_head', 'template_remove_recent_comments_style', 1 );
+  // clean up gallery output in wp
+  add_filter( 'gallery_style', 'template_gallery_style' );
 
-    // launching operation cleanup
-    add_action('init', 'bones_head_cleanup');
-    // A better title
-    add_filter('wp_title', 'rw_title', 10, 3);
-    // remove WP version from RSS
-    add_filter('the_generator', 'bones_rss_version');
-    // remove pesky injected css for recent comments widget
-    add_filter('wp_head', 'bones_remove_wp_widget_recent_comments_style', 1);
-    // clean up comment styles in the head
-    add_action('wp_head', 'bones_remove_recent_comments_style', 1);
-    // clean up gallery output in wp
-    add_filter('gallery_style', 'bones_gallery_style');
+  // enqueue base scripts and styles
+  add_action( 'wp_enqueue_scripts', 'template_scripts_and_styles', 999 );
+  // ie conditional wrapper
 
-    // enqueue base scripts and styles
-    add_action('wp_enqueue_scripts', 'bones_scripts_and_styles', 999);
-    // ie conditional wrapper
+  // launching this stuff after theme setup
+  template_theme_support();
 
-    // launching this stuff after theme setup
-    bones_theme_support();
+  // adding sidebars to Wordpress (these are created in functions.php)
+  add_action( 'widgets_init', 'template_register_sidebars' );
 
-    // adding sidebars to Wordpress (these are created in functions.php)
-    add_action('widgets_init', 'bones_register_sidebars');
+  // cleaning up random code around images
+  add_filter( 'the_content', 'template_filter_ptags_on_images' );
+  // cleaning up excerpt
+  add_filter( 'excerpt_more', 'template_excerpt_more' );
 
-    // cleaning up random code around images
-    add_filter('the_content', 'bones_filter_ptags_on_images');
-    // cleaning up excerpt
-    add_filter('excerpt_more', 'bones_excerpt_more');
-
-}
-/* end bones ahoy */
+} /* end template ahoy */
 
 // let's get this party started
-add_action('after_setup_theme', 'bones_ahoy');
+add_action( 'after_setup_theme', 'template_launch' );
 
 
-/************* OEMBED SIZE OPTIONS *************/
-
-if (!isset($content_width)) {
-    $content_width = 680;
-}
 
 /************* THUMBNAIL SIZE OPTIONS *************/
 
 // Thumbnail sizes
-add_image_size('bones-thumb-600', 600, 150, true);
-add_image_size('bones-thumb-300', 300, 100, true);
+add_image_size( 'template-image-600', 600, 600, true );
+add_image_size( 'template-image-300', 300, 300, true );
+add_image_size( 'template-image-300', 150, 150, true );
 
 /*
 to add more sizes, simply copy a line from above
@@ -93,22 +97,22 @@ inside the thumbnail function.
 
 For example, to call the 300 x 100 sized image,
 we would use the function:
-<?php the_post_thumbnail( 'bones-thumb-300' ); ?>
+<?php the_post_thumbnail( 'template-image-300' ); ?>
 for the 600 x 150 image:
-<?php the_post_thumbnail( 'bones-thumb-600' ); ?>
+<?php the_post_thumbnail( 'template-image-600' ); ?>
 
 You can change the names and dimensions to whatever
 you like. Enjoy!
 */
 
-add_filter('image_size_names_choose', 'bones_custom_image_sizes');
+add_filter( 'image_size_names_choose', 'template_custom_image_sizes' );
 
-function bones_custom_image_sizes($sizes)
-{
-    return array_merge($sizes, array(
-        'bones-thumb-600' => __('600px by 150px'),
-        'bones-thumb-300' => __('300px by 100px')
-    ));
+function template_custom_image_sizes( $sizes ) {
+    return array_merge( $sizes, array(
+        'template-image-600' => __('600px by 600px', 'templatetheme'),
+        'template-image-300' => __('300px by 300px', 'templatetheme'),
+        'template-image-150' => __('150px by 150px', 'templatetheme'),
+    ) );
 }
 
 /*
@@ -119,248 +123,852 @@ duplicate one of the lines in the array and name it according to your
 new image size.
 */
 
-/************* THEME CUSTOMIZE *********************/
-
-/*
-A good tutorial for creating your own Sections, Controls and Settings:
-http://code.tutsplus.com/series/a-guide-to-the-wordpress-theme-customizer--wp-33722
-
-Good articles on modifying the default options:
-http://natko.com/changing-default-wordpress-theme-customization-api-sections/
-http://code.tutsplus.com/tutorials/digging-into-the-theme-customizer-components--wp-27162
-
-To do:
-- Create a js for the postmessage transport method
-- Create some sanitize functions to sanitize inputs
-- Create some boilerplate Sections, Controls and Settings
-*/
-
-function bones_theme_customizer($wp_customize)
-{
-    // $wp_customize calls go here.
-    //
-    // Uncomment the below lines to remove the default customize sections
-
-    // $wp_customize->remove_section('title_tagline');
-    // $wp_customize->remove_section('colors');
-    // $wp_customize->remove_section('background_image');
-    // $wp_customize->remove_section('static_front_page');
-    // $wp_customize->remove_section('nav');
-
-    // Uncomment the below lines to remove the default controls
-    // $wp_customize->remove_control('blogdescription');
-
-    // Uncomment the following to change the default section titles
-    // $wp_customize->get_section('colors')->title = __( 'Theme Colors' );
-    // $wp_customize->get_section('background_image')->title = __( 'Images' );
-}
-
-add_action('customize_register', 'bones_theme_customizer');
 
 /************* ACTIVE SIDEBARS ********************/
 
 // Sidebars & Widgetizes Areas
-function bones_register_sidebars()
-{
-    register_sidebar(array(
-        'id' => 'sidebar1',
-        'name' => __('Main Sidebar', 'bonestheme'),
-        'description' => __('The first (primary) sidebar.', 'bonestheme'),
-        'before_widget' => '<div id="%1$s" class="widget %2$s">',
-        'after_widget' => '</div>',
-        'before_title' => '<h4 class="widgettitle">',
-        'after_title' => '</h4>'
-    ));
+function template_register_sidebars() {
+	register_sidebar(array(
+		'id' => 'sidebar1',
+		'name' => __( 'Sidebar 1', 'templatetheme' ),
+		'description' => __( 'The first (primary) sidebar.', 'templatetheme' ),
+		'before_widget' => '<div id="%1$s" class="widget %2$s">',
+		'after_widget' => '</div>',
+		'before_title' => '<h4 class="widgettitle">',
+		'after_title' => '</h4>',
+	));
 
-    register_sidebar(array(
-        'id' => 'mobile_sidebar',
-        'name' => __('Mobile Menu', 'bonestheme'),
-        'description' => __('The mobile menu area.', 'bonestheme'),
-        'before_widget' => '<div id="%1$s" class="widget %2$s">',
-        'after_widget' => '</div>',
-        'before_title' => '<h4 class="widgettitle">',
-        'after_title' => '</h4>'
-    ));
+  register_sidebar(array(
+      'id' => 'mobile_sidebar',
+      'name' => __('Mobile Menu', 'bonestheme'),
+      'description' => __('The mobile menu area.', 'bonestheme'),
+      'before_widget' => '<div id="%1$s" class="widget %2$s">',
+      'after_widget' => '</div>',
+      'before_title' => '<h4 class="widgettitle">',
+      'after_title' => '</h4>'
+  ));
 
-    register_sidebar(array(
-        'id' => 'social_media',
-        'name' => __('Social Media', 'bonestheme'),
-        'description' => __('The social media widget area.', 'bonestheme'),
-        'before_widget' => '<div id="%1$s" class="widget %2$s">',
-        'after_widget' => '</div>',
-        'before_title' => '<h4 class="widgettitle">',
-        'after_title' => '</h4>'
-    ));
+  register_sidebar(array(
+      'id' => 'social_media',
+      'name' => __('Social Media', 'bonestheme'),
+      'description' => __('The social media widget area.', 'bonestheme'),
+      'before_widget' => '<div id="%1$s" class="widget %2$s">',
+      'after_widget' => '</div>',
+      'before_title' => '<h4 class="widgettitle">',
+      'after_title' => '</h4>'
+  ));
 
-    /*
-    to add more sidebars or widgetized areas, just copy
-    and edit the above sidebar code. In order to call
-    your new sidebar just use the following code:
+	/*
+	to add more sidebars or widgetized areas, just copy
+	and edit the above sidebar code. In order to call
+	your new sidebar just use the following code:
 
-    Just change the name to whatever your new
-    sidebar's id is, for example:
+	Just change the name to whatever your new
+	sidebar's id is, for example:
 
-    register_sidebar(array(
-    'id' => 'sidebar2',
-    'name' => __( 'Sidebar 2', 'bonestheme' ),
-    'description' => __( 'The second (secondary) sidebar.', 'bonestheme' ),
-    'before_widget' => '<div id="%1$s" class="widget %2$s">',
-    'after_widget' => '</div>',
-    'before_title' => '<h4 class="widgettitle">',
-    'after_title' => '</h4>',
-    ));
+	register_sidebar(array(
+		'id' => 'sidebar2',
+		'name' => __( 'Sidebar 2', 'templatetheme' ),
+		'description' => __( 'The second (secondary) sidebar.', 'templatetheme' ),
+		'before_widget' => '<div id="%1$s" class="widget %2$s">',
+		'after_widget' => '</div>',
+		'before_title' => '<h4 class="widgettitle">',
+		'after_title' => '</h4>',
+	));
 
-    To call the sidebar in your template, you can just copy
-    the sidebar.php file and rename it to your sidebar's name.
-    So using the above example, it would be:
-    sidebar-sidebar2.php
+	To call the sidebar in your template, you can just copy
+	the sidebar.php file and rename it to your sidebar's name.
+	So using the above example, it would be:
+	sidebar-sidebar2.php
 
-    */
+	*/
 } // don't remove this bracket!
 
 
-/************* COMMENT LAYOUT *********************/
+/*********************
+COMMENTS
+Blah blah blah.
+*********************/
+
+// Adding a custom gravatar. Customize this to add your own. Or delete it. It's totally up to you.
+add_filter( 'avatar_defaults', 'new_default_avatar' );
+
+function new_default_avatar ( $avatar_defaults ) {
+    //Set the URL where the image file for your avatar is located
+    $new_avatar_url = get_stylesheet_directory_uri() . '/library/images/custom-gravatar.jpg';
+    // var_dump($new_avatar_url);
+    //Set the text that will appear to the right of your avatar in Settings>>Discussion
+    $avatar_defaults[$new_avatar_url] = 'Custom Avatar';
+    return $avatar_defaults;
+}
+
 
 // Comment Layout
-function bones_comments($comment, $args, $depth)
-{
-    $GLOBALS['comment'] = $comment;
-?>
-  <div id="comment-<?php
-    comment_ID();
-?>" <?php
-    comment_class('cf');
-?>>
+function template_comments( $comment, $args, $depth ) {
+   $GLOBALS['comment'] = $comment; ?>
+  <div id="comment-<?php comment_ID(); ?>" <?php comment_class('cf'); ?>>
     <article  class="cf">
-      <header class="comment-author vcard">
-        <?php
-    /*
-    this is the new responsive optimized comment image. It used the new HTML5 data-attribute to display comment gravatars on larger screens only. What this means is that on larger posts, mobile sites don't have a ton of requests for comment images. This makes load time incredibly fast! If you'd like to change it back, just replace it with the regular wordpress gravatar call:
-    echo get_avatar($comment,$size='32',$default='<path_to_url>' );
-    */
-?>
-        <?php // custom gravatar call
-?>
-        <?php
-    // create variable
-    $bgauthemail = get_comment_author_email();
-?>
-        <img data-gravatar="http://www.gravatar.com/avatar/<?php
-    echo md5($bgauthemail);
-?>?s=40" class="load-gravatar avatar avatar-48 photo" height="40" width="40" src="<?php
-    echo get_template_directory_uri();
-?>/library/images/nothing.gif" />
-        <?php // end custom gravatar call
-?>
-        <?php
-    printf(__('<cite class="fn">%1$s</cite> %2$s', 'bonestheme'), get_comment_author_link(), edit_comment_link(__('(Edit)', 'bonestheme'), '  ', ''));
-?>
-        <time datetime="<?php
-    echo comment_time('Y-m-j');
-?>"><a href="<?php
-    echo htmlspecialchars(get_comment_link($comment->comment_ID));
-?>"><?php
-    comment_time(__('F jS, Y', 'bonestheme'));
-?> </a></time>
+      <header class="comment-author vcard media">
 
-      </header>
-      <?php
-    if ($comment->comment_approved == '0'):
-?>
-        <div class="alert alert-info">
-          <p><?php
-        _e('Your comment is awaiting moderation.', 'bonestheme');
-?></p>
-        </div>
-      <?php
-    endif;
-?>
-      <section class="comment_content cf">
         <?php
-    comment_text();
-?>
+        /*
+          this is the new responsive optimized comment image. It used the new HTML5 data-attribute to display comment gravatars on larger screens only. What this means is that on larger posts, mobile sites don't have a ton of requests for comment images. This makes load time incredibly fast! If you'd like to change it back, just replace it with the regular wordpress gravatar call:
+          echo get_avatar($comment,$size='32',$default='<path_to_url>' );
+        */
+        ?>
+        <?php // custom gravatar call ?>
+        <?php
+          // create variable
+          $bgauthemail = get_comment_author_email();
+        ?>
+        <div class="media-left">
+          <img data-gravatar="//www.gravatar.com/avatar/<?php echo md5( $bgauthemail ); ?>?s=40" class="load-gravatar avatar avatar-48 photo" height="40" width="40" src="<?php echo get_theme_file_uri(); ?>/library/images/nothing.gif" alt="<?php echo $bgauthemail ?>" />
+        <?php // end custom gravatar call ?>
+        </div>
+        <div class="media-body">
+          <?php printf(__( '<cite class="fn">%1$s</cite> %2$s', 'templatetheme' ), get_comment_author_link(), edit_comment_link(__( '(Edit)', 'templatetheme' ),'  ','') ) ?>
+        <time datetime="<?php echo comment_time('Y-m-j'); ?>"><a href="<?php echo htmlspecialchars( get_comment_link( $comment->comment_ID ) ) ?>"><?php comment_time(__( 'F jS, Y', 'templatetheme' )); ?> </a></time>
+        </div>
+      </header>
+      <?php if ($comment->comment_approved == '0') : ?>
+        <div class="alert alert-info">
+          <p><?php _e( 'Your comment is awaiting moderation.', 'templatetheme' ) ?></p>
+        </div>
+      <?php endif; ?>
+      <section class="comment_content cf">
+        <?php comment_text() ?>
       </section>
-      <?php
-    comment_reply_link(array_merge($args, array(
-        'depth' => $depth,
-        'max_depth' => $args['max_depth']
-    )));
-?>
+      <?php comment_reply_link(array_merge( $args, array('depth' => $depth, 'max_depth' => $args['max_depth']))) ?>
+      <div class="clearfix"></div>
     </article>
-  <?php // </li> is added by WordPress automatically
-?>
+  <?php // </li> is added by WordPress automatically ?>
 <?php
 } // don't remove this bracket!
 
 
 /*
-This is a modification of a function found in the
-twentythirteen theme where we can declare some
-external fonts. If you're using Google Fonts, you
-can replace these fonts, change it in your scss files
-and be up and running in seconds.
+Use this to add Google or other web fonts.
 */
-function bones_fonts()
-{
-    //wp_enqueue_style('googleFonts', '//fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic');
+// function template_fonts() {
+//   wp_enqueue_style('templateFonts', 'http://fonts.googleapis.com/css?family=Open+Sans:400,600,400italic,');
+// }
+
+// add_action('wp_enqueue_scripts', 'template_fonts');
+
+
+/****************************************
+* SCHEMA *
+http://www.longren.io/add-schema-org-markup-to-any-wordpress-theme/
+****************************************/
+
+function html_schema() {
+
+    $schema = 'http://schema.org/';
+
+    // Is single post
+    if( is_single()) {
+        $type = "Article";
+    }
+    // Is blog home, archive or category
+    else if( is_home() || is_archive() || is_category() ) {
+        $type = "Blog";
+    }
+    // Is static front page
+    else if( is_front_page()) {
+        $type = "Website";
+    }
+    // Is a general page
+     else {
+        $type = 'WebPage';
+    }
+
+    echo 'itemscope="itemscope" itemtype="' . $schema . $type . '"';
 }
 
-add_action('wp_enqueue_scripts', 'bones_fonts');
+
+
+/*********************
+WP_HEAD GOODNESS
+The default wordpress head is
+a mess. Let's clean it up by
+removing all the junk we don't
+need.
+*********************/
+
+function template_head_cleanup() {
+  // category feeds
+  remove_action( 'wp_head', 'feed_links_extra', 3 );
+  // post and comment feeds
+  remove_action( 'wp_head', 'feed_links', 2 );
+  // EditURI link
+  remove_action( 'wp_head', 'rsd_link' );
+  // windows live writer
+  remove_action( 'wp_head', 'wlwmanifest_link' );
+  // previous link
+  remove_action( 'wp_head', 'parent_post_rel_link', 10, 0 );
+  // start link
+  remove_action( 'wp_head', 'start_post_rel_link', 10, 0 );
+  // links for adjacent posts
+  remove_action( 'wp_head', 'adjacent_posts_rel_link_wp_head', 10, 0 );
+  // WP version
+  remove_action( 'wp_head', 'wp_generator' );
+  // remove WP version from css
+  add_filter( 'style_loader_src', 'template_remove_wp_ver_css_js', 9999 );
+  // remove WP version from scripts
+  add_filter( 'script_loader_src', 'template_remove_wp_ver_css_js', 9999 );
+
+} /* end template head cleanup */
+
+
+// remove WP version from RSS
+function template_rss_version() { return ''; }
+
+// remove WP version from scripts
+function template_remove_wp_ver_css_js( $src ) {
+  if ( strpos( $src, 'ver=' ) )
+    $src = remove_query_arg( 'ver', $src );
+  return $src;
+}
+
+// remove injected CSS for recent comments widget
+function template_remove_wp_widget_recent_comments_style() {
+  if ( has_filter( 'wp_head', 'wp_widget_recent_comments_style' ) ) {
+    remove_filter( 'wp_head', 'wp_widget_recent_comments_style' );
+  }
+}
+
+// remove injected CSS from recent comments widget
+function template_remove_recent_comments_style() {
+  global $wp_widget_factory;
+  if (isset($wp_widget_factory->widgets['WP_Widget_Recent_Comments'])) {
+    remove_action( 'wp_head', array($wp_widget_factory->widgets['WP_Widget_Recent_Comments'], 'recent_comments_style') );
+  }
+}
+
+// remove injected CSS from gallery
+function template_gallery_style($css) {
+  return preg_replace( "!<style type='text/css'>(.*?)</style>!s", '', $css );
+}
+
+
+/*********************
+SCRIPTS & ENQUEUEING
+*********************/
+
+// loading modernizr and jquery, and reply script
+function template_scripts_and_styles() {
+
+  global $wp_styles; // call global $wp_styles variable to add conditional wrapper around ie stylesheet the WordPress way
+
+  if (!is_admin()) {
+
+    // modernizr (without media query polyfill)
+    //wp_register_script( 'template-modernizr', get_theme_file_uri() . '/library/js/libs/modernizr-custom.js', array(), '3.5.0', false );
+
+    // Register Google Fonts
+    wp_register_style( 'google-fonts-stylesheet', 'https://fonts.googleapis.com/css?family=Poppins:300,500,400,600,700', array(), '', 'all' );
+
+    // register main stylesheet
+    wp_register_style( 'template-stylesheet', get_theme_file_uri() . '/assets/css/theme.css', array(), '', 'all' );
+
+    // ie-only style sheet
+    //wp_register_style( 'template-ie-only', get_theme_file_uri() . '/library/css/ie.css', array(), '' );
+
+    // comment reply script for threaded comments
+    if ( is_singular() AND comments_open() AND ( get_option('thread_comments') == 1 )) {
+      wp_enqueue_script( 'comment-reply' );
+    }
+
+    //adding scripts file in the footer
+    wp_register_script( 'template-js', get_stylesheet_directory_uri() . '/assets/js/theme.js', array( 'jquery' ), '', true );
+
+    // Template extra scripts. Uncomment to use. Or better yet, copy what you need to the main scripts folder or on the page(s) you need it
+    // wp_register_script( 'template-extra-js', get_stylesheet_directory_uri() . '/library/js/extras/extra-scripts.js', array( 'jquery' ), '', true );
+
+    // enqueue styles and scripts
+    //wp_enqueue_script( 'template-modernizr' );
+    wp_enqueue_style( 'google-fonts-stylesheet' );
+    wp_enqueue_style( 'template-stylesheet' );
+    //wp_enqueue_style( 'template-ie-only' );
+
+    $wp_styles->add_data( 'template-ie-only', 'conditional', 'lt IE 9' ); // add conditional wrapper around ie stylesheet
+
+    wp_enqueue_script( 'jquery' );
+    wp_enqueue_script( 'template-js' );
+    // wp_enqueue_script( 'template-extra-js' );
+
+  }
+}
+
+/****************************************
+* REMOVE WP EXTRAS & DEQUEUEING STUFFS *
+****************************************/
+
+// Remove emojis: because WordPress is serious business.
+// But, if you want emojis, don't let me stop you from having a good time.
+// To enable emojis, comment these functions out or just delete them.
+
+add_action( 'init', 'disable_wp_emojicons' );
+
+function disable_wp_emojicons() {
+
+  // all actions related to emojis
+  remove_action( 'admin_print_styles', 'print_emoji_styles' );
+  remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+  remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
+  remove_action( 'wp_print_styles', 'print_emoji_styles' );
+  remove_filter( 'wp_mail', 'wp_staticize_emoji_for_email' );
+  remove_filter( 'the_content_feed', 'wp_staticize_emoji' );
+  remove_filter( 'comment_text_rss', 'wp_staticize_emoji' );
+
+  // filter to remove TinyMCE emojis
+  add_filter( 'tiny_mce_plugins', 'disable_emojicons_tinymce' );
+}
+
+function disable_emojicons_tinymce( $plugins ) {
+  if ( is_array( $plugins ) ) {
+    return array_diff( $plugins, array( 'wpemoji' ) );
+  } else {
+    return array();
+  }
+}
+
+
+/* Dequeue jQuery Migrate
+* I'm commenting this out by default. Why? Because Gravity Forms *requires* it
+* for some forms functions to work...***eye roll***.
+*
+*/
+// add_action( 'wp_default_scripts', 'template_dequeue_jquery_migrate' );
+// function template_dequeue_jquery_migrate( $scripts ) {
+//   if (! empty( $scripts->registered['jquery'] ) ) {
+//     $jquery_dependencies = $scripts->registered['jquery']->deps;
+//     $scripts->registered['jquery']->deps = array_diff( $jquery_dependencies, array( 'jquery-migrate' ) );
+//   }
+// }
+
+
+// Remove wp-embed.min.js from the front end. Commented out by default as you may need it.
+// See here: https://wordpress.stackexchange.com/questions/211701/what-does-wp-embed-min-js-do-in-wordpress-4-4
+// add_action( 'init', function() {
+
+//       // Remove the REST API endpoint.
+//       remove_action('rest_api_init', 'wp_oembed_register_route');
+
+//       // Turn off oEmbed auto discovery.
+//       // Don't filter oEmbed results.
+//       remove_filter('oembed_dataparse', 'wp_filter_oembed_result', 10);
+
+//       // Remove oEmbed discovery links.
+//       remove_action('wp_head', 'wp_oembed_add_discovery_links');
+
+//       // Remove oEmbed-specific JavaScript from the front-end and back-end.
+//       remove_action('wp_head', 'wp_oembed_add_host_js');
+//   }, PHP_INT_MAX - 1 );
+
+
+// Remove the p from around imgs (http://css-tricks.com/snippets/wordpress/remove-paragraph-tags-from-around-images/)
+// Not sure if this actually works anymore.
+function template_filter_ptags_on_images($content){
+    return preg_replace('/<p>\s*(<a .*>)?\s*(<img .* \/>)\s*(<\/a>)?\s*<\/p>/iU', '\1\2\3', $content);
+}
+
+
+// This removes the annoying […] to a Read More link
+function template_excerpt_more($more) {
+    global $post;
+     // edit here if you like
+    return '...  <a class="excerpt-read-more" href="'. get_permalink( $post->ID ) . '" title="'. __( 'Read ', 'templatetheme' ) . esc_attr( get_the_title( $post->ID ) ).'">'. __( 'Read more &raquo;', 'templatetheme' ) .'</a>';
+}
+
+
+/*********************
+THEME SUPPORT
+*********************/
+
+// Adding WP 3+ Functions & Theme Support
+function template_theme_support() {
+
+    // wp thumbnails (sizes handled in functions.php)
+    add_theme_support( 'post-thumbnails' );
+
+    // default thumb size
+    set_post_thumbnail_size(125, 125, true);
+
+    // wp custom background (thx to @bransonwerner for update)
+    add_theme_support( 'custom-background',
+        array(
+        'default-image' => '',    // background image default
+        'default-color' => '',    // background color default (dont add the #)
+        'wp-head-callback' => '_custom_background_cb',
+        'admin-head-callback' => '',
+        'admin-preview-callback' => ''
+        )
+    );
+
+    // Custom Header Image
+    add_theme_support( 'custom-header',
+        array(
+        'default-image'          => get_template_directory_uri() . '/library/images/header-image.png',
+        'default-text-color'     => 'ffffff',
+        'header-text'            => true,
+        'uploads'                => true,
+        'wp-head-callback'       => 'template_style_header'
+        )
+    );
+
+    // Custom Logo
+    add_theme_support( 'custom-logo',
+        array(
+        'height'      => 100,
+        'width'       => 400,
+        'flex-height' => true,
+        'flex-width'  => true,
+        'header-text' => array( 'site-title', 'site-description' ),
+        )
+    );
+
+    // rss thingy
+    add_theme_support('automatic-feed-links');
+
+    // wp menus
+    add_theme_support( 'menus' );
+
+    // registering wp3+ menus
+    // To add another menu, uncomment the second line and change it to whatever you want. You can have even more menus.
+    register_nav_menus(
+        array(
+          'main-nav' => __( 'The Main Menu', 'templatetheme' ),   // main nav in header
+          // 'footer-links' => __( 'Footer Links', 'templatetheme' ) // secondary nav in footer. Uncomment to use or edit.
+        )
+    );
+
+    // Title tag
+    add_theme_support( 'title-tag' );
+
+    // Enable support for HTML5 markup.
+    add_theme_support( 'html5',
+        array(
+        'comment-list',
+        'comment-form',
+        'search-form',
+        'gallery',
+        'caption'
+        )
+    );
+
+    /* Post Formats
+    Ahhhh yes, the wild and wonderful world of Post Formats.
+    I've never really gotten into them but I could see some
+    situations where they would come in handy. Here's a few
+    examples: https://www.competethemes.com/blog/wordpress-post-format-examples/
+
+    This theme doesn't use post formats per se but we need this
+    to pass the theme check.
+
+    We may add better support for post formats in the future.
+
+    If you want to use them in your project, do so by all means.
+    We won't judge you.
+    */
+
+    add_theme_support( 'post-formats',
+    array(
+        'aside',             // title less blurb
+        'gallery',           // gallery of images
+        'link',              // quick link to other site
+        'image',             // an image
+        'quote',             // a quick quote
+        'status',            // a Facebook like status update
+        'video',             // video
+        'audio',             // audio
+        'chat'               // chat transcript
+        )
+    );
+
+    } /* end template theme support */
+
+
+    /* Add WooCommerce support. This function only removes the warning
+    in the WP admin when WooCommerce is installed. To fully support
+    WooCommerce you will need to add some stuff to your product loops.
+    See here: https://docs.woocommerce.com/document/third-party-custom-theme-compatibility/
+    */
+    add_action( 'after_setup_theme', 'woocommerce_support' );
+
+    function woocommerce_support() {
+        add_theme_support( 'woocommerce' );
+    }
+
+
+/****************************************
+* CUSTOMIZER *
+****************************************/
+
+    add_action( 'customize_register', 'template_register_theme_customizer' );
+
+    function template_register_theme_customizer( $wp_customize ) {
+
+        // Uncomment this to see what's going on if you make a lot of changes
+        // echo '<pre>';
+        // var_dump( $wp_customize );
+        // echo '</pre>';
+
+        // Customize title and tagline sections and labels
+        $wp_customize->get_section('title_tagline')->title = __('Site Name and Description', 'templatetheme');
+        $wp_customize->get_control('blogname')->label = __('Site Name', 'templatetheme');
+        $wp_customize->get_control('blogdescription')->label = __('Site Description', 'templatetheme');
+        $wp_customize->get_setting( 'blogname' )->transport = 'postMessage';
+        $wp_customize->get_setting( 'blogdescription' )->transport  = 'postMessage';
+
+        // Customize the Front Page Settings
+        $wp_customize->get_section('static_front_page')->title = __('Homepage Preferences', 'templatetheme');
+        $wp_customize->get_section('static_front_page')->priority = 20;
+        $wp_customize->get_control('show_on_front')->label = __('Choose Homepage Preference:', 'templatetheme');
+        $wp_customize->get_control('page_on_front')->label = __('Select Homepage:', 'templatetheme');
+        $wp_customize->get_control('page_for_posts')->label = __('Select Blog Homepage:', 'templatetheme');
+
+        // Customize Background Settings
+        $wp_customize->get_section('background_image')->title = __('Background Styles', 'templatetheme');
+        $wp_customize->get_control('background_color')->section = 'background_image';
+
+        // Customize Header Image Settings
+        $wp_customize->add_section( 'header_text_styles' , array(
+        'title'      => __('Header Text Styles','templatetheme'),
+        'priority'   => 30
+        ) );
+        $wp_customize->get_control('display_header_text')->section = 'header_text_styles';
+        $wp_customize->get_control('header_textcolor')->section = 'header_text_styles';
+        $wp_customize->get_setting( 'header_textcolor' )->transport = 'postMessage';
+
+    }
+
+
+    // Custom scripts + styles for theme customizer
+    add_action( 'customize_preview_init', 'template_customizer_scripts' );
+
+    function template_customizer_scripts() {
+        wp_enqueue_script(
+        'template_theme_customizer',
+        get_template_directory_uri() . '/library/js/theme-customizer.js',
+        array( 'jquery', 'customize-preview' ),
+        '',
+        true
+    );
+
+    // register customizer stylesheet
+    wp_register_style( 'template-customizer', get_theme_file_uri() . '/library/css/customizer.css', array(), '', 'all' );
+    wp_enqueue_style( 'template-customizer' );
+
+    }
+
+
+// Callback function for updating header styles
+function template_style_header() {
+
+    $text_color = get_header_textcolor();
+
+    ?>
+
+    <style type="text/css">
+
+        header.header .site-title a {
+          color: #<?php echo esc_attr( $text_color ); ?>;
+        }
+
+        <?php if(display_header_text() != true): ?>
+        .site-title, .site-description {
+          display: none;
+        }
+        <?php endif; ?>
+
+        #banner .header-image {
+          max-width: 100%;
+          height: auto;
+        }
+
+        .customize-control-description {
+          font-style: normal;
+        }
+
+    </style>
+  <?php
+
+}
+
+/*********************
+RELATED POSTS FUNCTION
+*********************/
+
+// Related Posts Function (call using template_related_posts(); )
+function template_related_posts() {
+    echo '<ul id="template-related-posts">';
+    global $post;
+    $tags = wp_get_post_tags( $post->ID );
+    if( $tags ) {
+        foreach( $tags as $tag ) {
+            $tag_arr .= $tag->slug . ',';
+        }
+        $args = array(
+            'tag' => $tag_arr,
+            'numberposts' => 5, /* you can change this to show more */
+            'post__not_in' => array($post->ID)
+        );
+        $related_posts = get_posts( $args );
+        if( $related_posts ) {
+            foreach ( $related_posts as $post ) : setup_postdata( $post ); ?>
+            <li class="related_post"><a class="entry-unrelated" href="<?php the_permalink() ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></li>
+            <?php endforeach;
+        } else { ?>
+            <?php echo '<li class="no_related_post">' . __( 'No Related Posts Yet!', 'templatetheme' ) . '</li>'; ?>
+        <?php }
+    } /* end if ($tags) */
+    wp_reset_postdata();
+    echo '</ul>';
+} /* end template related posts function */
+
+/*********************
+PAGE NAVI
+*********************/
+
+// Numeric Page Navi (built into the theme by default)
+function template_page_navi() {
+    global $wp_query;
+    $bignum = 999999999;
+    if ( $wp_query->max_num_pages <= 1 )
+        return;
+    echo '<nav class="pagination">';
+    echo paginate_links( array(
+        'base'         => str_replace( $bignum, '%#%', esc_url( get_pagenum_link($bignum) ) ),
+        'format'       => '',
+        'current'      => max( 1, get_query_var('paged') ),
+        'total'        => $wp_query->max_num_pages,
+        'prev_text'    => '&larr;',
+        'next_text'    => '&rarr;',
+        'type'         => 'list',
+        'end_size'     => 3,
+        'mid_size'     => 3
+        )
+    );
+  echo '</nav>';
+} /* end page navi */
+
+
+/*
+****************************************
+*      TEMPLATE SPECIAL FUNCTIONS      *
+****************************************
+*/
+
+// Body Class functions
+// Adds more slugs to body class so we can style individual pages + posts.
+// Page Slug Body Class
+add_filter( 'body_class', 'template_body_class' );
+
+function template_body_class( $classes ) {
+    global $post;
+    if ( isset( $post ) ) {
+        /* $classes[] = $post->post_type . '-' . $post->post_name; *//*Un comment this if you want the post_type-post_name body class */
+        $pagetemplate = get_post_meta( $post->ID, '_wp_page_template', true);
+        $classes[] = sanitize_html_class( str_replace( '.', '-', $pagetemplate ), '' );
+        $classes[] = $post->post_name;
+    }
+
+    if (is_page()) {
+        global $post;
+        if ( $post->post_parent ) {
+            # Parent post name/slug
+            $parent = get_post( $post->post_parent );
+            $classes[] = $parent->post_name;
+
+            # Parent template name
+            $parent_template = get_post_meta( $parent->ID, '_wp_page_template', true);
+
+            if ( !empty($parent_template) )
+                $classes[] = 'template-'.sanitize_html_class( str_replace( '.', '-', $parent_template ), '' );
+        }
+
+        // If we *do* have an ancestors list, process it
+        // http://codex.wordpress.org/Function_Reference/get_post_ancestors
+        if ($parents = get_post_ancestors($post->ID)) {
+            foreach ((array)$parents as $parent) {
+                // As the array contains IDs only, we need to get each page
+                if ($page = get_page($parent)) {
+                    // Add the current ancestor to the body class array
+                    $classes[] = "{$page->post_type}-{$page->post_name}";
+                }
+            }
+        }
+
+        // Add the current page to our body class array
+        $classes[] = "{$post->post_type}-{$post->post_name}";
+    }
+
+    return $classes;
+
+}
+
+
+// Let's add some extra Quicktags
+// These come in handy especially for clients who aren't HTML masters
+// Hook into the 'admin_print_footer_scripts' action
+add_action( 'admin_print_footer_scripts', 'template_custom_quicktags' );
+
+function template_custom_quicktags() {
+
+    if ( wp_script_is( 'quicktags' ) ) { ?>
+        <script type="text/javascript">
+        QTags.addButton( 'qt-p', 'p', '<p>', '</p>', '', '', 1 );
+        QTags.addButton( 'qt-br', 'br', '<br>', '', '', '', 9 );
+        QTags.addButton( 'qt-span', 'span', '<span>', '</span>', '', '', 11 );
+        QTags.addButton( 'qt-h2', 'h2', '<h2>', '</h2>', '', '', 12 );
+        QTags.addButton( 'qt-h3', 'h3', '<h3>', '</h3>', '', '', 13 );
+        QTags.addButton( 'qt-h4', 'h4', '<h4>', '</h4>', '', '', 14 );
+        QTags.addButton( 'qt-h5', 'h5', '<h5>', '</h5>', '', '', 15 );
+        </script>
+<?php }
+
+}
+
+// Load dashicons on the front end
+// To use, go here and copy the css/html for the dashicon you want: https://developer.wordpress.org/resource/dashicons/
+// Example: <span class="dashicons dashicons-wordpress"></span>
+// add_action( 'wp_enqueue_scripts', 'template_load_dashicons' );
+// function template_load_dashicons() {
+//     wp_enqueue_style( 'dashicons' );
+// }
+
+
+// Post Author function (from WP Twenty Seventeen theme)
+// We use this in the byline template part but included here in case you want to use it elsewhere.
+if ( ! function_exists( 'template_posted_on' ) ) :
+/**
+ * Prints HTML with meta information for the current post-date/time and author.
+ */
+function template_posted_on() {
+
+  // Get the author name; wrap it in a link.
+  $byline = sprintf(
+    /* translators: %s: post author */
+    __( 'by %s', 'templatetheme' ),
+    '<span class="author vcard"><a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '">' . get_the_author() . '</a></span>'
+  );
+
+  // Finally, let's write all of this to the page.
+  echo '<span class="posted-on">' . template_time_link() . '</span><span class="byline"> ' . $byline . '</span>';
+}
+endif;
+
+// Post Time function (from WP Twenty Seventeen theme)
+if ( ! function_exists( 'template_time_link' ) ) :
+/**
+ * Gets a nicely formatted string for the published date.
+ */
+function template_time_link() {
+    $time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';
+    // if ( get_the_time( 'U' ) !== get_the_modified_time( 'U' ) ) {
+    //   $time_string = '<time class="entry-date published" datetime="%1$s">%2$s</time><time class="updated" datetime="%3$s">%4$s</time>';
+    // }
+
+    $time_string = sprintf( $time_string,
+    get_the_date( DATE_W3C ),
+    get_the_date(),
+    get_the_modified_date( DATE_W3C ),
+    get_the_modified_date()
+    );
+
+    // Wrap the time string in a link, and preface it with 'Posted on'.
+    return sprintf(
+    /* translators: %s: post date */
+    __( '<span class="screen-reader-text">Posted on</span> %s', 'templatetheme' ),
+    '<a href="' . esc_url( get_permalink() ) . '" rel="bookmark">' . $time_string . '</a>'
+    );
+}
+endif;
+
+// Register Custom Navigation Walker
+require_once get_template_directory() . '/wp-bootstrap-navwalker.php';
 
 // Custom Excerpt
-function my_excerpt($excerpt_length = 55, $id = false, $echo = true)
-{
+function my_excerpt($excerpt_length = 55, $id = false, $echo = true) {
 
     $text = '';
 
-    if ($id) {
-        $the_post =& get_post($my_id = $id);
+    if($id) {
+        $the_post = & get_post( $my_id = $id );
         $text = ($the_post->post_excerpt) ? $the_post->post_excerpt : $the_post->post_content;
     } else {
         global $post;
         $text = ($post->post_excerpt) ? $post->post_excerpt : get_the_content('');
     }
 
-    $text = strip_shortcodes($text);
+    $text = strip_shortcodes( $text );
     $text = apply_filters('the_content', $text);
     $text = str_replace(']]>', ']]&gt;', $text);
     $text = strip_tags($text);
 
     $excerpt_more = ' ' . '...';
-    $words        = preg_split("/[\n\r\t ]+/", $text, $excerpt_length + 1, PREG_SPLIT_NO_EMPTY);
-    if (count($words) > $excerpt_length) {
+    $words = preg_split("/[\n\r\t ]+/", $text, $excerpt_length + 1, PREG_SPLIT_NO_EMPTY);
+    if ( count($words) > $excerpt_length ) {
         array_pop($words);
         $text = implode(' ', $words);
         $text = $text . $excerpt_more;
     } else {
         $text = implode(' ', $words);
     }
-    if ($echo)
+    if($echo)
         echo apply_filters('the_content', $text);
     else
         return $text;
 }
 
-function get_my_excerpt($excerpt_length = 55, $id = false, $echo = false)
-{
+function get_my_excerpt($excerpt_length = 55, $id = false, $echo = false) {
     return my_excerpt($excerpt_length, $id, $echo);
 }
 
-// Register custom navigation walker
-require_once('wp_bootstrap_navwalker.php');
-
-register_nav_menus(array(
-    'primary' => __('Primary Menu', 'bones')
-));
-
 //Page Slug Body Class
-function add_slug_body_class($classes)
-{
-    global $post;
-    if (isset($post)) {
-        $classes[] = $post->post_type . '-' . $post->post_name;
+add_filter( 'body_class', 'add_slug_body_class' );
+function add_slug_body_class( $classes ) {
+  global $post;
+  if ( isset( $post ) ) {
+    $classes[] = $post->post_type . '-' . $post->post_name;
+  }
+  return $classes;
+}
+
+// Recaptcha Verification
+require get_template_directory() . '/inc/recaptcha-verification.php';
+
+// Form Database Instert
+//require get_template_directory() . '/inc/form-insert.php';
+
+// Comment Customization
+add_filter( 'comment_form_fields', 'wpb_move_comment_field_to_bottom' );
+function wpb_move_comment_field_to_bottom( $fields ) {
+    $comment_field = $fields['comment'];
+    unset( $fields['comment'] );
+    $fields['comment'] = $comment_field;
+    return $fields;
+}
+
+// Recaptcha on Comments
+add_action("wp_enqueue_scripts", "frontend_recaptcha_script");
+function frontend_recaptcha_script() {
+    wp_register_script('recaptcha', 'https://www.google.com/recaptcha/api.js', array(), '', true);
+    wp_enqueue_script('recaptcha');
+}
+add_filter("preprocess_comment", "verify_comment_captcha", 10, 2 );
+function verify_comment_captcha( $commentdata ) {
+    if (isset($_POST['g-recaptcha-response'])) {
+        $response = verifyCaptcha($_POST['g-recaptcha-response']);
+        if ($response->success) {
+            return $commentdata;
+        } else {
+            wp_die("<strong>ERROR</strong>: Please check the recaptcha box.", 'Recaptcha Error', array('response' => 200, 'back_link' => true));
+        }
+    } else {
+        wp_die("<strong>ERROR</strong>: Please check the recaptcha box.", 'Recaptcha Error', array('response' => 200, 'back_link' => true));
     }
-    return $classes;
 }
 
 // Testimonial Filter
@@ -369,7 +977,7 @@ function testimonial_page_template( $template ) {
     $uri = $_SERVER["REQUEST_URI"];
     $uri_array = explode('/',$uri);
     if ($uri_array[1] == 'testimonial') {
-        $new_template = locate_template( array( 'page-full-width.php' ) );
+        $new_template = locate_template( array( 'page-full.php' ) );
         if ( '' != $new_template ) {
             return $new_template ;
         }
@@ -377,220 +985,8 @@ function testimonial_page_template( $template ) {
     return $template;
 }
 
-/* Recaptcha Verification */
-function verifyCaptcha($googleResp){
-    $fields = array(
-        'secret' => urlencode(getenv('RECAPTCHA_SECRETKEY')),
-        'response' => urlencode($googleResp),
-        'remoteip' => urlencode($_SERVER['REMOTE_ADDR'])
-    );
-
-    $fields_string = '';
-
-    //url-ify the data for the POST
-    foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
-    rtrim($fields_string, '&');
-
-
-    //Initialize curl
-    $ch = curl_init();
-
-    //Set URL and other appropriate options
-    curl_setopt($ch, CURLOPT_URL, 'https://www.google.com/recaptcha/api/siteverify');
-    curl_setopt($ch, CURLOPT_POST, count($fields));
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HEADER, false);
-
-    //Grab URL and pass it to the browser
-    $response = curl_exec($ch);
-
-    //Close cURL resource, and free up system resources
-    curl_close($ch);
-
-    $response = json_decode($response);
-
-    return $response;
-}
-
-/**
- * Handle Contact Form
- *
- */
-function contact_form_shortcode()
-{
-    //wp_enqueue_script('googlerecaptcha', 'https://www.google.com/recaptcha/api.js');
-    $error   = false;
-    $result  = '';
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        // set the "required fields" to check
-        $required_fields = array(
-            "contactname",
-            "email",
-            "phone",
-            "message"
-        );
-
-        // this part fetches everything that has been POSTed, sanitizes them and lets us use them as $form_data['subject']
-        foreach ($_POST as $field => $value) {
-            if (get_magic_quotes_gpc()) {
-                $value = stripslashes($value);
-            }
-            $form_data[$field] = strip_tags($value);
-        }
-        $form_data['opt_in'] = isset($form_data['opt_in']) ? 1 : 0;
-
-        // if the required fields are empty, switch $error to TRUE
-        foreach ($required_fields as $required_field) {
-            $value = trim($form_data[$required_field]);
-            if (empty($value)) {
-                $error = true;
-                if ($required_field == 'contactname') {
-                    $result .= "<li>Please fill out your name.</li>";
-                    $has_error['contactname'] = true;
-                } elseif ($required_field == 'email') {
-                    $result .= "<li>Please fill out an email address.</li>";
-                    $has_error['email'] = true;
-                } elseif ($required_field == 'phone') {
-                    $result .= "<li>Please fill out your phone number.</li>";
-                    $has_error['phone'] = true;
-                } elseif ($required_field == 'message') {
-                    $result .= "<li>Please fill out a message for us.</li>";
-                    $has_error['message'] = true;
-                } else {
-                    $result = "<li>Please fill in all the required fields.</li>";
-                }
-            }
-        }
-
-        // and if the e-mail is not valid, switch $error to TRUE and set the result text to the shortcode attribute named 'error_noemail'
-        if (!is_email($form_data['email'])) {
-            $error = true;
-            $result .= "<li>Please enter a valid e-mail address.</li>";
-            $has_error['email'] = true;
-        }
-
-        /* Verify Captcha */
-        $response = verifyCaptcha($_POST['g-recaptcha-response']);
-        if (!$response->success) {
-            $error = true;
-            $result .= "<li>Captcha validation has failed.</li>";
-            $has_error['recaptcha'] = true;
-        }
-
-        if ($error == false) {
-
-            // Add DB Logging Here
-            echo do_shortcode("[cfdb-save-form-post]");
-
-            /* Email Admin */
-
-            $htmlEmail = file_get_contents(get_template_directory_uri() . '/library/html/email.html');
-
-            /* Replace Logo */
-            $logo = get_template_directory_uri().'/library/images/nuviewnutrition-logo-email.jpg';
-            $htmlEmail = str_replace('../images/nuviewnutrition-logo-email.jpg', $logo, $htmlEmail);
-
-            $formDataEmail = '<br><table style="color: #636466; font-family: \'Helvetica\' \'Arial\', sans-serif; font-weight: normal; text-align: left; line-height: 19px; font-size: 14px;">
-                    <tr>
-                        <td valign="top" width="180">Name: </td>
-                        <td>' . $form_data['contactname'] . '</td>
-                    </tr>
-                    <tr>
-                        <td>Email:</td>
-                        <td>' . $form_data['email'] . '</td>
-                    </tr>
-                    <tr>
-                        <td>Phone:</td>
-                        <td>' . $form_data['phone'] . '</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">Message:</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">' . $form_data['message'] . '</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">' . (($form_data['mc4wp-subscribe']) ? 'Yes, I would like to subscribe to the newsletter.' : 'No, I would not like to subscribe to the newsletter.') . '</td>
-                    </tr>
-                </table>';
-
-            $htmlEmail = str_replace('!*data*!', $formDataEmail, $htmlEmail);
-
-            $to = 'info@nuviewnutrition.com';
-            $subject = 'You\'ve Been Contacted By the Nuview Nutrition Website';
-            //$headers = 'From: Nuview Nutrition <info@nuviewnutrition.com>;' . PHP_EOL;
-            $headers[] = 'From: Nuview Nutrition <info@nuviewnutrition.com>';
-            $headers[] = 'Bcc: Matt Crandell <matt@crandelldesign.com>';
-            $message = $htmlEmail;
-
-            add_filter('wp_mail_content_type',create_function('', 'return "text/html"; '));
-            if(wp_mail($to,$subject,$message, $headers)) {
-                $result = "Thanks for your e-mail! We'll get back to you as soon as we can.";
-                // ...and switch the $sent variable to TRUE
-                $sent   = true;
-                // Unset form data variable
-                unset($form_data);
-                unset($has_error);
-                ///return true;
-            } else {
-                $error = true;
-                //return false;
-            }
-        }
-    }
-
-    $info = '';
-
-    if ($error == true) {
-        $info = '<div class="alert alert-danger"><ul>' . $result . '</ul></div>';
-    }
-    if ($error == false && $result != '') {
-        $info = '<div class="alert alert-success">' . $result . '</div>';
-    }
-
-    ob_start();
-        do_action('google_invre_render_widget_action');
-        $recaptcha = ob_get_contents();
-    ob_end_clean();
-
-    $admin_post_url = esc_url(admin_url("admin-post.php"));
-    $email_form     = '<form class="contact-form" action="' . get_permalink() . '#contact" method="post">
-        <div class="form-group' . ((isset($has_error['contactname']) && $has_error['contactname']) ? ' has-error' : '') . '">
-            <label for="contactname">Full Name</label>
-            <input type="text" name="contactname" id="contactname" value="' . (isset($form_data) ? $form_data['contactname'] : '') . '" class="form-control">
-        </div>
-        <div class="form-group' . ((isset($has_error['email']) && $has_error['email']) ? ' has-error' : '') . '">
-            <label for="email">Email</label>
-            <input type="email" name="email" id="email" value="' . (isset($form_data) ? $form_data['email'] : '') . '" class="form-control">
-        </div>
-        <div class="form-group' . ((isset($has_error['phone']) && $has_error['phone']) ? ' has-error' : '') . '">
-            <label for="phone">Phone</label>
-            <input type="phone" name="phone" id="phone" value="' . (isset($form_data) ? $form_data['phone'] : '') . '" class="form-control">
-        </div>
-        <div class="form-group' . ((isset($has_error['message']) && $has_error['message']) ? ' has-error' : '') . '">
-            <label for="message">Your Message</label>
-            <textarea name="message" id="message" class="form-control" rows="3">' . (isset($form_data) ? $form_data['message'] : '') . '</textarea>
-        </div>
-        <div class="form-group">
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" name="mc4wp-subscribe" value="1" /> Subscribe to our newsletter.
-                </label>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="g-recaptcha" data-sitekey="'.getenv('RECAPTCHA_SITEKEY').'"></div>
-        </div>
-        <div class="form-group">
-            <input type="hidden" name="form_title" value="Contact Form">
-            <button type="submit" class="btn btn-crimson submit-btn">Submit</button>
-        </div>
-    </form>';
-    return $info . $email_form;
-
-}
-add_shortcode('contact_form', 'contact_form_shortcode');
+// Contact Form
+require get_template_directory() . '/inc/shortcode-contact-form.php';
 
 /* Explore More Shortcode */
 add_shortcode('explore_more', 'explore_more_shortcode');
@@ -708,35 +1104,6 @@ function add_admin_scripts() {
 }
 add_action( 'admin_enqueue_scripts', 'add_admin_scripts' );
 
-// Comment Customization
-function wpb_move_comment_field_to_bottom( $fields ) {
-    $comment_field = $fields['comment'];
-    unset( $fields['comment'] );
-    $fields['comment'] = $comment_field;
-    return $fields;
-}
-add_filter( 'comment_form_fields', 'wpb_move_comment_field_to_bottom' );
-
-// Recaptcha on Comments
-function frontend_recaptcha_script() {
-    wp_register_script('recaptcha', 'https://www.google.com/recaptcha/api.js', array(), '', true);
-    wp_enqueue_script('recaptcha');
-}
-add_action("wp_enqueue_scripts", "frontend_recaptcha_script");
-function verify_comment_captcha( $commentdata ) {
-    if (isset($_POST['g-recaptcha-response'])) {
-        $response = verifyCaptcha($_POST['g-recaptcha-response']);
-        if ($response->success) {
-            return $commentdata;
-        } else {
-            wp_die("<strong>ERROR</strong>: Please check the recaptcha box.", 'Recaptcha Error', array('response' => 200, 'back_link' => true));
-        }
-    } else {
-        wp_die("<strong>ERROR</strong>: Please check the recaptcha box.", 'Recaptcha Error', array('response' => 200, 'back_link' => true));
-    }
-}
-add_filter("preprocess_comment", "verify_comment_captcha", 10, 2 );
-
 //SSL/HTTPS
 function check_if_https() {
     if ( !is_ssl() ) {
@@ -746,5 +1113,20 @@ function check_if_https() {
 }
 add_action ( 'template_redirect', 'check_if_https', 1 );
 
-/* DON'T DELETE THIS CLOSING TAG */
+// Page Template Name
+add_filter( 'template_include', 'var_template_include', 1000 );
+function var_template_include( $t ){
+    $GLOBALS['current_theme_template'] = basename($t);
+    return $t;
+}
+
+function get_current_template( $echo = false ) {
+    if( !isset( $GLOBALS['current_theme_template'] ) )
+        return false;
+    if( $echo )
+        echo $GLOBALS['current_theme_template'];
+    else
+        return $GLOBALS['current_theme_template'];
+}
+
 ?>

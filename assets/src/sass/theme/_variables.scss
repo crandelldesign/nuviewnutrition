@@ -1,0 +1,85 @@
+// Variables
+
+/* Standard Shadows */
+$z1-shadow: 0  1px  3px rgba(#000, 0.12), 0  1px  2px rgba(#000, 0.24);
+$z2-shadow: 0  3px  6px rgba(#000, 0.16), 0  3px  6px rgba(#000, 0.23);
+$z3-shadow: 0 10px 20px rgba(#000, 0.19), 0  6px  6px rgba(#000, 0.23);
+$z4-shadow: 0 14px 28px rgba(#000, 0.25), 0 10px 10px rgba(#000, 0.22);
+$z5-shadow: 0 19px 38px rgba(#000, 0.30), 0 15px 12px rgba(#000, 0.22);
+
+/* Top shadows (for "bottom" positionned elements) */
+$top-z1-shadow: 0  -1px  3px rgba(#000, 0.12), 0  -1px  2px rgba(#000, 0.24);
+$top-z2-shadow: 0  -3px  6px rgba(#000, 0.16), 0  -3px  6px rgba(#000, 0.23);
+$top-z3-shadow: 0 -10px 20px rgba(#000, 0.19), 0  -6px  6px rgba(#000, 0.23);
+$top-z4-shadow: 0 -14px 28px rgba(#000, 0.25), 0 -10px 10px rgba(#000, 0.22);
+$top-z5-shadow: 0 -19px 38px rgba(#000, 0.30), 0 -15px 12px rgba(#000, 0.22);
+
+/* Shadows for full size "side" elements (using spread to make corners look right) */
+$side-z1-shadow: 0 0  3px 0.75px rgba(#000, 0.12), 0 0  2px 0.5px rgba(#000, 0.24);
+$side-z2-shadow: 0 0  6px  1.5px rgba(#000, 0.16), 0 0  6px 1.5px rgba(#000, 0.23);
+$side-z3-shadow: 0 0 20px    5px rgba(#000, 0.19), 0 0  6px 1.5px rgba(#000, 0.23);
+$side-z4-shadow: 0 0 28px    7px rgba(#000, 0.25), 0 0 10px 2.5px rgba(#000, 0.22);
+$side-z5-shadow: 0 0 38px  9.5px rgba(#000, 0.30), 0 0 12px   3px rgba(#000, 0.22);
+
+/* Colors */
+/* Color Names By: http://chir.ag/projects/name-that-color/ and http://www.color-blindness.com/color-name-hue/ */
+$crimson: #ed1c24;
+$rosebud: lighten($crimson,30%); //#f8aaad
+$carnation: lighten($crimson,15%); //#f36368
+$shiraz: darken($crimson,15%); //#af0e14
+$darkburgundy: darken($crimson,30%); //#68080c
+$malachite: #0bb957;
+$aquamarine: lighten($malachite,30%); //#67f6a5
+$springgreen: lighten($malachite,15%); //#1ff27b
+$salem: darken($malachite,15%); //#077135
+$englishholly: darken($malachite,30%); //#022913
+
+$black: #252525;
+$sb-black: #111111;
+$lightgray: #fafafa;
+$text-muted: #444;
+$border-color: #ccc;
+
+// Bootstrap Colors and Variables
+$brand-primary: $crimson;
+$link-color: $malachite;
+$link-hover-color: $shiraz;
+$link-hover-decoration: none;
+
+/* Typography */
+$sans-serif: 'Poppins', sans-serif;
+$serif: 'Cardo', serif;
+$font-family-sans-serif: $sans-serif;
+$font-family-serif: $serif;
+
+$font-family-base: $sans-serif;
+$headings-font-family: $sans-serif;
+
+$font-size-base: 15px;
+
+// Footer Height
+$footer-height: 125px;
+
+// Spacing
+$spacer: 15px;
+
+// Boostrap Variables
+$navbar-margin-bottom: 0;
+$figure-caption-font-size: 90%;
+$figure-caption-color: #868e96;
+
+// Font Awesome Variables
+$fa-font-path: "../fonts/font-awesome";
+
+/* Navbar Variables */
+$navbar-margin-bottom: 0;
+$navbar-border-radius: 0;
+$nav-link-hover-bg: $shiraz;
+//$navbar-height: 82px;
+$navbar-padding-vertical: 15px;
+
+/* Forms */
+$input-color: $black;
+
+/* Breadcrumbs */
+$breadcrumb-bg: #FFF;

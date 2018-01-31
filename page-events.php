@@ -9,57 +9,57 @@
 ?>
 
 <?php get_header(); ?>
-	<div id="content">
-		<div id="inner-content" class="row">
+    <div id="content">
+        <div id="inner-content" class="row">
             <main id="main" class="col-sm-8" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
 
-				<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
+                <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 
-				<header class="article-header">
-					<h1 class="page-title" itemprop="headline"><?php the_title(); ?></h1>
-				</header> <?php // end article header ?>
+                <header class="article-header">
+                    <h1 class="page-title" itemprop="headline"><?php the_title(); ?></h1>
+                </header> <?php // end article header ?>
 
-				<?php get_template_part('breadcrumbs'); ?>
+                <?php get_template_part('templates/breadcrumbs'); ?>
 
-				<?php the_content(); ?>
+                <?php the_content(); ?>
 
-				<?php endwhile; endif; ?>
+                <?php endwhile; endif; ?>
 
-				<?php
-					$eventsIdObj = get_category_by_slug('event');
-					$eventsId = $eventsIdObj->term_id;
+                <?php
+                    $eventsIdObj = get_category_by_slug('event');
+                    $eventsId = $eventsIdObj->term_id;
 
-					// We define the current date, using the included function.
-					$mem_today = mem_date_of_today();
+                    // We define the current date, using the included function.
+                    $mem_today = mem_date_of_today();
 
-					// We set a limit for past events:
-					$mem_date_expiration = ( 365 * DAY_IN_SECONDS );
-					// Here we will display them up to 2 days after they occurred.
-					// Change that number according to your requirements.
+                    // We set a limit for past events:
+                    $mem_date_expiration = ( 365 * DAY_IN_SECONDS );
+                    // Here we will display them up to 2 days after they occurred.
+                    // Change that number according to your requirements.
 
-					$mem_unix_limit = ( $mem_today["unix"] - $mem_date_expiration );
-					$mem_age_limit = date_i18n( "Y-m-d", $mem_unix_limit);
+                    $mem_unix_limit = ( $mem_today["unix"] - $mem_date_expiration );
+                    $mem_age_limit = date_i18n( "Y-m-d", $mem_unix_limit);
 
-					// Now, the custom query:
-					$paged = ( get_query_var('paged') ) ? get_query_var('paged') : 1;
-					$args = array(
-					  'posts_per_page' => 10,
-					  //'meta_key' => '_mem_start_date',
-					  //'meta_value'  => $mem_age_limit,
-					  //'meta_compare'    => '>=',
-					  //'orderby'  => 'meta_value',
-					  //'order'  => 'ASC',
-					  'ignore_sticky_posts' => true,
-					  'cat' => $eventsId,
-					  'paged' => $paged
-					);
+                    // Now, the custom query:
+                    $paged = ( get_query_var('paged') ) ? get_query_var('paged') : 1;
+                    $args = array(
+                      'posts_per_page' => 10,
+                      //'meta_key' => '_mem_start_date',
+                      //'meta_value'  => $mem_age_limit,
+                      //'meta_compare'    => '>=',
+                      //'orderby'  => 'meta_value',
+                      //'order'  => 'ASC',
+                      'ignore_sticky_posts' => true,
+                      'cat' => $eventsId,
+                      'paged' => $paged
+                    );
 
-					$the_query = new WP_Query( $args );
-				?>
+                    $the_query = new WP_Query( $args );
+                ?>
 
-				<?php //query_posts('cat='.$eventsId); ?>
-				<?php if ($the_query->have_posts()) : while ($the_query->have_posts()) : $the_query->the_post(); ?>
-					<article id="post-<?php the_ID(); ?>" <?php post_class( 'cf' ); ?> role="article">
+                <?php //query_posts('cat='.$eventsId); ?>
+                <?php if ($the_query->have_posts()) : while ($the_query->have_posts()) : $the_query->the_post(); ?>
+                    <article id="post-<?php the_ID(); ?>" <?php post_class( 'cf' ); ?> role="article">
 
                         <header class="article-header">
                             <h1 class="h2 entry-title"><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
@@ -89,29 +89,29 @@
 
                     </article>
 
-				<?php endwhile; ?>
+                <?php endwhile; ?>
 
-					<?php
+                    <?php
                         if (function_exists(custom_pagination)) {
                             custom_pagination($the_query->max_num_pages,"",$paged);
                         }
                     ?>
 
-				<?php else : ?>
+                <?php else : ?>
 
-					<article id="post-not-found" class="hentry cf">
-						<section class="entry-content">
-							<p><?php _e( 'There are not any upcoming events. Please check back later.', 'bonestheme' ); ?></p>
-						</section>
-					</article>
+                    <article id="post-not-found" class="hentry cf">
+                        <section class="entry-content">
+                            <p><?php _e( 'There are not any upcoming events. Please check back later.', 'bonestheme' ); ?></p>
+                        </section>
+                    </article>
 
-				<?php endif; ?>
+                <?php endif; ?>
 
-			</main>
+            </main>
 
-			<?php get_sidebar(); ?>
+            <?php get_sidebar(); ?>
 
-		</div>
+        </div>
 
-	</div>
+    </div>
 <?php get_footer(); ?>

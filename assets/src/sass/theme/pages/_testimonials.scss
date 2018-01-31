@@ -1,0 +1,53 @@
+// All Testimonials
+.easy_t_single_testimonial {
+    @extend .clearfix;
+    blockquote.easy_testimonial {
+        border: 0;
+        padding: 10px;
+        cite span {
+            display: block;
+        }
+        .stars {
+            height: 18px;
+            span {
+                color: #666;
+                float: left;
+            }
+            .dashicons-star-filled, .dashicons-star-half, .dashicons-star-empty {
+                color: gold;
+            }
+        }
+    }
+}
+
+// Single Testimnial
+body.single-testimonial {
+    .easy_testimonial_image_wrapper {
+        @extend .blog-featured-img;
+    }
+}
+
+// List Testimonials
+.page-testimonials {
+    .easy_t_single_testimonial {
+        @extend .post.hentry;
+        blockquote {
+            padding: 1.5em 1.5em 0;
+        }
+        .easy_testimonial_image_wrapper {
+            img {
+                display: block;
+                margin: 0 auto 1em auto;
+                @include shadow-1();
+                @media (min-width: $screen-sm-min) {
+                    float: left;
+                    margin: 0 1em 1em 0;
+                }
+            }
+        }
+        .easy_testimonial_title {
+            @extend .h2;
+            margin-top: 0;
+        }
+    }
+}

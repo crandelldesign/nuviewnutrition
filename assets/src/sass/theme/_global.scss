@@ -1,0 +1,73 @@
+// Global Styles
+
+/* Body Styles */
+html {
+    min-height: 100%;
+    position: relative
+}
+body {
+    background-color: $rosebud;
+    height: 100%;
+    min-height: 100%;
+    @media (min-width: $screen-sm-min) {
+        background: #636a7b url('../img/background.jpg') no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    }
+}
+/* Typography and Colors */
+body {
+    font-family: 'Poppins', sans-serif;
+    color: $black;
+    font-weight: 300;
+}
+h1, .h1 {
+    color: $shiraz;
+    font-size: 38px;
+    font-weight: 600;
+    @media (min-width: $screen-sm-min) {
+        font-size: 40px;
+    }
+}
+h2, .h2, .gform_wrapper h2.gsection_title {
+    font-weight: 600;
+    color: $salem;
+    font-size: 30px;
+    @media (min-width: $screen-md-min) {
+        font-size: 34px;
+    }
+}
+h3, .h3, .gform_wrapper .subsection h2.gsection_title {
+    font-weight: 500;
+    color: $darkburgundy;
+}
+a {
+    &.hover {
+        color: $shiraz;
+        text-decoration: none;
+    }
+    &[href^=tel] {
+        white-space: nowrap;
+    }
+}
+.red-link {
+    color: $crimson;
+    &:hover {
+        color: $shiraz;
+    }
+}
+hr {
+    border-top: 1px solid $rosebud;
+    @media (min-width: $screen-md-min) {
+        margin-top: 35px;
+        margin-bottom: 35px;
+    }
+}
+label {
+    font-weight: 500;
+}
+.dropdown-menu {
+    @include shadow-1();
+}

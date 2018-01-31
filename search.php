@@ -1,77 +1,49 @@
 <?php get_header(); ?>
 
-			<div id="content">
+	<div id="content">
 
-				<div id="inner-content" class="row">
+		<div id="inner-content" class="wrap cf">
 
-					<main id="main" class="col-sm-8"  role="main">
-						<h1 class="archive-title"><span><?php _e( 'Search Results for:', 'bonestheme' ); ?></span> <?php echo esc_attr(get_search_query()); ?></h1>
+			<main id="main" class="m-all t-2of3 d-5of7 cf" role="main">
 
-						<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
+				<h1 class="archive-title"><span><?php _e( 'Search Results for:', 'templatetheme' ); ?></span> <?php echo esc_attr(get_search_query()); ?></h1>
 
-							<article id="post-<?php the_ID(); ?>" <?php post_class('cf'); ?> role="article">
+				<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 
-								<header class="entry-header article-header">
+					<article id="post-<?php the_ID(); ?>" <?php post_class('cf'); ?> role="article">
 
-									<h3 class="search-title entry-title"><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h3>
+						<header class="entry-header article-header">
 
-                  						<p class="byline entry-meta vcard">
-                    							<?php printf( __( 'Posted %1$s by %2$s', 'bonestheme' ),
-                   							    /* the time the post was published */
-                   							    '<time class="updated entry-time" datetime="' . get_the_time('Y-m-d') . '" itemprop="datePublished">' . get_the_time(get_option('date_format')) . '</time>',
-                      							    /* the author of the post */
-                       							    '<span class="by">by</span> <span class="entry-author author" itemprop="author" itemscope itemptype="http://schema.org/Person">' . get_the_author_link( get_the_author_meta( 'ID' ) ) . '</span>'
-                    							); ?>
-                  						</p>
+							<?php get_template_part( 'templates/header', 'title'); ?>
 
-								</header>
+          					<?php get_template_part( 'templates/byline'); ?>
 
-								<section class="entry-content">
-										<?php the_excerpt( '<span class="read-more">' . __( 'Read more &raquo;', 'bonestheme' ) . '</span>' ); ?>
+						</header>
 
-								</section>
+						<section class="entry-content">
+							
+							<?php get_template_part( 'templates/content', 'excerpt'); ?>
 
-								<footer class="article-footer">
+						</section>
 
-									<?php if(get_the_category_list(', ') != ''): ?>
-                  					<?php printf( __( 'Filed under: %1$s', 'bonestheme' ), get_the_category_list(', ') ); ?>
-                  					<?php endif; ?>
+						<footer class="article-footer">
 
-                 					<?php the_tags( '<p class="tags"><span class="tags-title">' . __( 'Tags:', 'bonestheme' ) . '</span> ', ', ', '</p>' ); ?>
+							<?php get_template_part( 'templates/category-tags'); ?>
 
-								</footer> <!-- end article footer -->
+						</footer> <!-- end article footer -->
 
-							</article>
+					</article>
 
-						<?php endwhile; ?>
+					<?php get_template_part( 'templates/post-navigation'); ?>
 
-								<?php bones_page_navi(); ?>
+				<?php endwhile; endif; ?>
 
-							<?php else : ?>
+			</main>
 
-									<article id="post-not-found" class="hentry cf">
-										<header class="article-header">
-											<h1><?php _e( 'Sorry, No Results.', 'bonestheme' ); ?></h1>
-										</header>
-										<section class="entry-content">
-											<p><?php _e( 'Try your search again.', 'bonestheme' ); ?></p>
-                                            <div class="search">
-                                                <p><?php get_search_form(); ?></p>
-                                            </div>
-										</section>
-										<!---<footer class="article-footer">
-											<p><?php /*_e( 'This is the error message in the search.php template.', 'bonestheme' );*/ ?></p>
-										</footer>
-									</article>-->
+			<?php get_sidebar(); ?>
 
-							<?php endif; ?>
+		</div>
 
-						</main>
-
-						<?php get_sidebar(); ?>
-
-					</div>
-
-			</div>
+	</div>
 
 <?php get_footer(); ?>

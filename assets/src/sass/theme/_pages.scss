@@ -1,0 +1,123 @@
+// All Pages
+.container-fluid.page-content {
+    padding: 15px;
+    background-color: #FFF;
+    @include shadow-2();
+    border: 1px solid $crimson;
+    @media (min-width: $screen-md-min) {
+        margin: 50px 30px;
+        padding: 30px;
+    }
+    @media (min-width: 1300px) {
+        @include page-width();
+    }
+}
+h1.page-title {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+.partner-heading {
+    font-size: 16px;
+}
+.main-img, .slideshow_container .slideshow_content, .page-content article img, .page-content article .embed-responsive {
+    box-shadow: $z1-shadow;
+    &.no-shadow {
+        box-shadow: none;
+    }
+}
+.page-content {
+    .img-left {
+        margin-bottom: 15px;
+        @media (min-width: $screen-sm-min) {
+            float: left;
+            margin-right: 15px;
+        }
+    }
+    .img-right {
+        margin-bottom: 15px;
+        @media (min-width: $screen-sm-min) {
+            float: right;
+            margin-left: 15px;
+        }
+    }
+}
+.events-carousel {
+    .carousel-caption {
+        left: 15px;
+        right: 15px;
+        background-color: rgba(0,0,0,0.5);
+        h3 {
+            color: #FFF;
+        }
+    }
+    .carousel-control {
+        width: 10%;
+    }
+}
+.featured-img {
+    &.width-850 {
+        max-width: 850px;
+    }
+    &.width-750 {
+        max-width: 750px;
+    }
+    &.width-640 {
+        max-width: 640px;
+    }
+    &.width-400 {
+        max-width: 400px;
+    }
+}
+.event .event-info, article .byline {
+    display: block;
+    font-size: 15px;
+    color: $text-muted;
+}
+.event .event-info .event-date.date-repeats {
+    display: inline-block;
+    margin-left: 10px;
+}
+article {
+    .byline {
+        display: block;
+        margin-bottom: 2px;
+        font-size: 14px;
+        color: $text-muted;
+    }
+}
+body.page {
+    .featured-img {
+        @include shadow-1();
+        display: block;
+        max-width: 100%;
+        &.featured-left  {
+            margin: 0 auto 1em auto;
+            @media (min-width: $screen-md-min) {
+                margin: 0 1em 1em 0;
+                float: left;
+            }
+        }
+
+    }
+}
+
+// Back to Top
+.back-to-top {
+    cursor: pointer;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    //display:none;
+    opacity: .5;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    transform: translateY(150px);
+    -webkit-transform: translateY(150px);
+    &:hover {
+        opacity: .75;
+    }
+    &.on-display {
+        transform: translateY(0);
+        -webkit-transform: translateY(0);
+    }
+}

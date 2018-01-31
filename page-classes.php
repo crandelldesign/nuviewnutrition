@@ -19,7 +19,7 @@
 					<h1 class="page-title" itemprop="headline"><?php the_title(); ?></h1>
 				</header> <?php // end article header ?>
 
-                <?php get_template_part('breadcrumbs'); ?>
+                <?php get_template_part('templates/breadcrumbs'); ?>
 
 				<?php the_content(); ?>
 
