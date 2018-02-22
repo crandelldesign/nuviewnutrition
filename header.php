@@ -49,7 +49,7 @@
 
 	<body <?php body_class(); ?> itemscope itemtype="http://schema.org/WebPage">
 
-        <div><strong>Current template:</strong> <?php get_current_template( true ); ?></div>
+        <!--<div><strong>Current template:</strong> <?php // get_current_template( true ); ?></div>-->
 
 		<?php // Customizer Header Image section. Uncomment to use. ?>
 			<!-- <?php if( get_header_image() != "" ) {
