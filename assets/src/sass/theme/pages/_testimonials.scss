@@ -22,6 +22,9 @@
 
 // Single Testimnial
 body.single-testimonial {
+    .easy_testimonial_image_wrapper:after {
+        @extend .clearfix;
+    }
     .easy_testimonial_image_wrapper {
         @extend .blog-featured-img;
     }
@@ -49,5 +52,10 @@ body.single-testimonial {
             @extend .h2;
             margin-top: 0;
         }
+        .testimonial_body .more-link {
+            @extend a;
+            white-space: nowrap;
+        }
     }
+
 }

@@ -13,7 +13,7 @@
         }
     }
     .entry-content {
-        padding: 1.5em 1.5em 0;
+        padding: 1.5em;
     }
     footer {
         padding: 1.5em;
@@ -22,6 +22,9 @@
         p {
             margin: 0;
         }
+    }
+    .comment-respond {
+        padding: 1.5em;
     }
 }
 
@@ -43,12 +46,13 @@ article {
             }
         }
     }
-    .blog-featured-img {
+    .blog-featured-img, .easy_testimonial_image_wrapper {
         img {
             @extend .img-responsive;
             @extend .center-block;
             @include shadow-1();
             margin-bottom: ($line-height-computed / 2);
+            float: none;
         }
     }
 }
